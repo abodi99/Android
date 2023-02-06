@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.winter.chatsystem.components.SettingsScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,22 +24,32 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    AppScreen()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+data class SettingsText(val text: String)
+var settingsText = listOf(
+    SettingsText("Edit Profile"),
+    SettingsText("Change Password"),
+    SettingsText("Dark Theme")
+)
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    ChatSystemTheme {
-        Greeting("Android")
+fun AppScreen(
+    modifier: Modifier = Modifier
+) {
+    val navController = rememberNavController()
+    
+    NavHost(
+        navController = navController,
+        startDestination = "settings"
+    ) {
+        composable("settings") {
+            SettingsScreen(navController)
+        }
     }
 }
