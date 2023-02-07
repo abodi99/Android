@@ -56,7 +56,7 @@ fun SettingsScreen(
             Text(
                 text = "Settings",
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(modifier = modifier.weight(2f))
         }
@@ -70,7 +70,6 @@ fun SettingsScreen(
                     shape = RoundedCornerShape(20.dp),
                     modifier = modifier
                         .padding(vertical = 3.dp)
-                        .size(300.dp, 40.dp)
                         .clickable(
                             onClick = {
 
@@ -84,7 +83,7 @@ fun SettingsScreen(
                         Text(
                             text = text.text,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             modifier = modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -98,28 +97,29 @@ fun SettingsScreen(
                     shape = RoundedCornerShape(20.dp),
                     modifier = modifier
                         .padding(vertical = 3.dp)
-                        .size(300.dp, 40.dp)
                 ) {
                     Row(
-                        //verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = modifier
-                            .padding(start = 5.dp, end = 30.dp)
+                            .padding(horizontal = 15.dp)
+                            .padding( end = 20.dp)
+
                     ) {
                         Text(
                             text = "Dark Theme",
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             modifier = modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.primaryContainer)
-                                .padding(10.dp)
+                                .padding(vertical = 10.dp)
                         )
                         var checked by remember {
                             mutableStateOf(true)
                         }
                         Switch(
                             checked = checked,
-                            onCheckedChange = { checked = it},
+                            onCheckedChange = { checked = it },
                             modifier = modifier
 
                         )
