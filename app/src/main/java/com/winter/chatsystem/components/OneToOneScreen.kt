@@ -102,14 +102,14 @@ fun OneToOne() {
                                 shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 25.dp, bottomStart = 50.dp, topStart = 5.dp),
                                 shadowElevation = 0.dp
                             ) {
-                                Text(text = "Hello",
+                                Text(text = "Hello, whats up?",
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSecondary,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(10.dp)
-                                        .height(40.dp)
+                                        .padding(4.dp)
+                                      //  .height(35.dp)
                                         .wrapContentSize(),
                                     textAlign = TextAlign.Justify
                                 )
@@ -125,17 +125,17 @@ fun OneToOne() {
                                     .wrapContentSize(Alignment.CenterEnd),
 
                                 color = MaterialTheme.colorScheme.tertiary,
-                                shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 5.dp, bottomStart = 50.dp, topStart = 25.dp),
+                                shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 5.dp, bottomStart = 40.dp, topStart = 25.dp),
                                 shadowElevation = 0.dp
                             ) {
-                                Text(text = "Hi",
+                                Text(text = "Hi, how you doing?",
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onTertiary,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(10.dp)
-                                        .height(40.dp)
+                                        .padding(4.dp)
+                                     //   .height(35.dp)
                                         .wrapContentSize(),
                                     textAlign = TextAlign.Start
                                 )
@@ -159,9 +159,9 @@ fun OneToOne() {
 
                     Row(
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary)
+                            //    .background(MaterialTheme.colorScheme.primary)
                             .fillMaxWidth()
-                            .height(62.dp),
+                            .height(65.dp),
 
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -169,28 +169,45 @@ fun OneToOne() {
 
 
                         Icon(
-                            Icons.Default.Phone, contentDescription = "Mic",
-                            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            Icons.Default.AccountCircle, contentDescription = "Mic",
+                            modifier = Modifier
+                                .padding(start = 6.dp, end = 6.dp)
+                                .size(30.dp),
+                            tint = MaterialTheme.colorScheme.primary
                         )
+
 
                         var textFieldValue by remember { mutableStateOf("") }
 
                         OutlinedTextField(value = textFieldValue,
                             onValueChange = {textFieldValue = it},
-                            label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                           // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                            placeholder = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
                             modifier = Modifier
                                 .width(280.dp)
-                                .padding(bottom = 6.5.dp),
+                                .padding(bottom = 4.5.dp),
                             singleLine = true,
-                            shape = RoundedCornerShape(25.dp),
-                            leadingIcon = { Icon(imageVector = Icons.Default.Face, contentDescription = "Msg", tint = MaterialTheme.colorScheme.onPrimary)},
-                            trailingIcon = { Icon(imageVector = Icons.Default.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.onPrimary)}
+                            shape = RoundedCornerShape(30.dp),
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Default.Face,
+                                contentDescription = "Msg",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )},
+
+                            trailingIcon = { Icon(
+                                imageVector = Icons.Default.Send,
+                                contentDescription = "Send",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )},
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = MaterialTheme.colorScheme.primary, containerColor = MaterialTheme.colorScheme.primary)
                         )
                         Icon(
-                            Icons.Default.Info, contentDescription = "Mic",
-                            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            Icons.Default.AddCircle, contentDescription = "Mic",
+                            modifier = Modifier
+                                .padding(start = 6.dp, end = 6.dp)
+                                .size(35.dp),
+                            tint = MaterialTheme.colorScheme.primary
                         )
 
 
