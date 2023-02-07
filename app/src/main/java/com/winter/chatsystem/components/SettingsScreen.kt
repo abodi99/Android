@@ -44,7 +44,7 @@ fun SettingsScreen(
         ) {
             IconButton(
                 ///modifier = modifier,
-                onClick = { /*TODO*/ }
+                onClick = { navController.popBackStack() }
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -78,7 +78,6 @@ fun SettingsScreen(
                         )
                 ) {
                     Row(
-                        //verticalAlignment = Alignment.CenterVertically
                     modifier = modifier
                         .padding(horizontal = 15.dp)
                     ) {
@@ -122,7 +121,7 @@ fun SettingsScreen(
                             checked = checked,
                             onCheckedChange = { checked = it},
                             modifier = modifier
-                                //.sizeIn(14.dp, 40.dp)
+
                         )
                     }
                 }
