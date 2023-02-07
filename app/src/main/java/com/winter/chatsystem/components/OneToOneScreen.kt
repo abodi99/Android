@@ -38,7 +38,7 @@ fun OneToOne() {
     Box(modifier = Modifier
         .fillMaxSize()
         //  .padding(2.dp)
-        .background(color = Color.LightGray)
+        .background(color = MaterialTheme.colorScheme.surfaceVariant)
     ){
         Column(
             modifier = Modifier
@@ -62,7 +62,11 @@ fun OneToOne() {
                     modifier = Modifier
                         .padding(5.dp)
                         .clip(CircleShape)
-                        .border(width = 4.dp, MaterialTheme.colorScheme.onPrimary, shape = CircleShape)
+                        .border(
+                            width = 4.dp,
+                            MaterialTheme.colorScheme.onPrimary,
+                            shape = CircleShape
+                        )
                     //.size(55.dp)
 
                 )
@@ -79,9 +83,9 @@ fun OneToOne() {
 
 
             LazyColumn(modifier = Modifier
-                .background(color = Color.LightGray)
+                .background(color = MaterialTheme.colorScheme.surfaceVariant)
                 .fillMaxWidth()
-                .fillMaxHeight(0.91f),
+                .fillMaxHeight(0.81f),
 
                 ){
                 items(20){ item ->
@@ -94,13 +98,13 @@ fun OneToOne() {
                                     .width(270.dp)
                                     .wrapContentSize(Alignment.CenterStart),
 
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(30.dp),
-                                shadowElevation = 8.dp
+                                color = MaterialTheme.colorScheme.secondary,
+                                shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 25.dp, bottomStart = 50.dp, topStart = 5.dp),
+                                shadowElevation = 0.dp
                             ) {
                                 Text(text = "Hello",
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.Black,
+                                    color = MaterialTheme.colorScheme.onSecondary,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -120,13 +124,13 @@ fun OneToOne() {
                                     .width(270.dp)
                                     .wrapContentSize(Alignment.CenterEnd),
 
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(30.dp),
-                                shadowElevation = 8.dp
+                                color = MaterialTheme.colorScheme.tertiary,
+                                shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 5.dp, bottomStart = 50.dp, topStart = 25.dp),
+                                shadowElevation = 0.dp
                             ) {
                                 Text(text = "Hi",
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.Black,
+                                    color = MaterialTheme.colorScheme.onTertiary,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -151,41 +155,78 @@ fun OneToOne() {
                 contentAlignment = Alignment.BottomCenter
             ){
 
-                Row(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primary)
-                        .fillMaxWidth()
-                        .height(62.dp),
+                Column() {
 
-                    verticalAlignment = Alignment.CenterVertically,
-                    //    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Icon(
-                        Icons.Default.Phone, contentDescription = "Mic",
-                        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-
-                    var textFieldValue by remember { mutableStateOf("") }
-
-                    OutlinedTextField(value = textFieldValue,
-                        onValueChange = {textFieldValue = it},
-                        label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                    Row(
                         modifier = Modifier
-                            .width(280.dp)
-                            .padding(bottom = 6.5.dp),
-                        singleLine = true,
-                        leadingIcon = { Icon(imageVector = Icons.Default.Face, contentDescription = "Msg", tint = MaterialTheme.colorScheme.onPrimary)},
-                        trailingIcon = { Icon(imageVector = Icons.Default.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.onPrimary)}
-                    )
-                    Icon(
-                        Icons.Default.Info, contentDescription = "Mic",
-                        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
+                            .background(MaterialTheme.colorScheme.primary)
+                            .fillMaxWidth()
+                            .height(62.dp),
+
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
 
 
+                        Icon(
+                            Icons.Default.Phone, contentDescription = "Mic",
+                            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+
+                        var textFieldValue by remember { mutableStateOf("") }
+
+                        OutlinedTextField(value = textFieldValue,
+                            onValueChange = {textFieldValue = it},
+                            label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                            modifier = Modifier
+                                .width(280.dp)
+                                .padding(bottom = 6.5.dp),
+                            singleLine = true,
+                            shape = RoundedCornerShape(25.dp),
+                            leadingIcon = { Icon(imageVector = Icons.Default.Face, contentDescription = "Msg", tint = MaterialTheme.colorScheme.onPrimary)},
+                            trailingIcon = { Icon(imageVector = Icons.Default.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.onPrimary)}
+                        )
+                        Icon(
+                            Icons.Default.Info, contentDescription = "Mic",
+                            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+
+
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.primary)
+                            .fillMaxWidth()
+                            .height(62.dp),
+
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(onClick = { /*TODO*/ }) {
+                            Icon(
+                                Icons.Default.Person, contentDescription = "Mic",
+                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                            Text(text = "Profile")
+                        }
+
+                        Button(onClick = { /*TODO*/ }) {
+                            Icon(
+                                Icons.Default.Settings, contentDescription = "Mic",
+                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                            Text(text = "Settings")
+                        }
+
+
+                    }
                 }
+
             }
         }
     }

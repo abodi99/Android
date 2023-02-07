@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.winter.chatsystem.components.OneToOne
 import com.winter.chatsystem.components.SettingsScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppScreen()
+                    OneToOne()
                 }
             }
         }
