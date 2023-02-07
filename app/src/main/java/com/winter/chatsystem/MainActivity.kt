@@ -35,7 +35,6 @@ data class SettingsText(val text: String)
 var settingsText = listOf(
     SettingsText("Edit Profile"),
     SettingsText("Change Password"),
-    SettingsText("Dark Theme")
 )
 
 @Composable
