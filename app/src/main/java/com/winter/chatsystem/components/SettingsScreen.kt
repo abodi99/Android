@@ -1,6 +1,8 @@
 package com.winter.chatsystem.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,13 +10,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.winter.chatsystem.settingsText
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Switch
+import androidx.compose.runtime.*
+import androidx.compose.ui.semantics.semantics
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,6 +30,7 @@ import com.winter.chatsystem.settingsText
 fun SettingsScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
+
 ) {
     Box(
         modifier = Modifier
@@ -35,7 +44,7 @@ fun SettingsScreen(
         ) {
             IconButton(
                 ///modifier = modifier,
-                onClick = { /*TODO*/ }
+                onClick = { navController.popBackStack() }
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -47,7 +56,7 @@ fun SettingsScreen(
             Text(
                 text = "Settings",
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(modifier = modifier.weight(2f))
         }
@@ -61,23 +70,59 @@ fun SettingsScreen(
                     shape = RoundedCornerShape(20.dp),
                     modifier = modifier
                         .padding(vertical = 3.dp)
-                        .size(300.dp, 40.dp)
+                        .clickable(
+                            onClick = {
+
+                            }
+                        )
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    modifier = modifier
+                        .padding(horizontal = 15.dp)
                     ) {
-                        TextButton(
-                            onClick = { /*TODO*/ },
+                        Text(
+                            text = text.text,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontSize = 16.sp,
                             modifier = modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.primaryContainer)
-                        ) {
-                            Text(
-                                text = text.text,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontSize = 14.sp,
-                            )
+                                .padding(vertical = 10.dp)
+                        )
+                    }
+                }
+            }
+            item {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = modifier
+                        .padding(vertical = 3.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier
+                            .padding(horizontal = 15.dp)
+                            .padding( end = 20.dp)
+
+                    ) {
+                        Text(
+                            text = "Dark Theme",
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontSize = 16.sp,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.primaryContainer)
+                                .padding(vertical = 10.dp)
+                        )
+                        var checked by remember {
+                            mutableStateOf(true)
                         }
+                        Switch(
+                            checked = checked,
+                            onCheckedChange = { checked = it },
+                            modifier = modifier
+
+                        )
                     }
                 }
             }
