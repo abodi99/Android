@@ -21,14 +21,14 @@ fun LoginScreen(
         ) {
             TextButton(
                 modifier = modifier
-                    .background(MaterialTheme.colorScheme.primaryContainer),
+                    .background(MaterialTheme.colorScheme.primary),
                 onClick = { /*TODO*/ }
             ) {
                 Text(
                     text = "Login",
                     style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     modifier = modifier
-                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
                 )
             }
         }
