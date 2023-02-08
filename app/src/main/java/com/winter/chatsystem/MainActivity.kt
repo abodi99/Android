@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen()
+                    AppScreen()
                 }
             }
         }
@@ -46,10 +46,13 @@ fun AppScreen(
     
     NavHost(
         navController = navController,
-        startDestination = "settings"
+        startDestination = "login"
     ) {
         composable("settings") {
             SettingsScreen(navController)
+        }
+        composable("login") {
+            LoginScreen(navController)
         }
     }
 }
