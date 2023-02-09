@@ -50,7 +50,7 @@ fun SettingsScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = ("ArrowBack"),
-                    tint = MaterialTheme.colorScheme.outline,
+                    tint = MaterialTheme.colorScheme.secondary,
                 )
             }
             //Spacer(modifier = modifier.weight(1f))
@@ -59,6 +59,7 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
+                fontSize = 36.sp,
             )
         }
         LazyColumn(
@@ -112,14 +113,11 @@ fun SettingsScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                         )
-                        var checked by remember {
-                            mutableStateOf(true)
-                        }
+                        val isChecked = remember { mutableStateOf(false) }
                         Switch(
-                            checked = checked,
-                            onCheckedChange = { checked = it },
+                            checked = isChecked.value,
+                            onCheckedChange = { isChecked.value = it},
                             modifier = modifier
-
                         )
                     }
                 }
