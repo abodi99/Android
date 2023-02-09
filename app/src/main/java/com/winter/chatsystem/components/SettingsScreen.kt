@@ -21,8 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.*
 import androidx.compose.ui.semantics.semantics
-
-
+import androidx.compose.ui.text.style.TextAlign
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,30 +34,33 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
-            .background(MaterialTheme.colorScheme.background),
+            ,
     
     ) {
         Row(
-            verticalAlignment =Alignment.CenterVertically//Keep text centered
+            verticalAlignment = Alignment.CenterVertically,//Keep text centered
+            modifier = modifier
+                .fillMaxWidth()
         ) {
             IconButton(
-                ///modifier = modifier,
                 onClick = { navController.popBackStack() }
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = ("ArrowBack"),
-                    tint = MaterialTheme.colorScheme.outline,
+                    tint = MaterialTheme.colorScheme.secondary,
                 )
             }
-            Spacer(modifier = modifier.weight(1f))
+            //Spacer(modifier = modifier.weight(1f))
             Text(
                 text = "Settings",
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center,
+                fontSize = 36.sp,
             )
-            Spacer(modifier = modifier.weight(2f))
         }
         LazyColumn(
             modifier = modifier
@@ -67,14 +69,14 @@ fun SettingsScreen(
         ) {
             items(settingsText) {text ->
                 Card(
-                    shape = RoundedCornerShape(20.dp),
                     modifier = modifier
                         .padding(vertical = 3.dp)
                         .clickable(
                             onClick = {
 
                             }
-                        )
+                        ),
+                    shape = RoundedCornerShape(20.dp),
                 ) {
                     Row(
                     modifier = modifier
@@ -82,11 +84,10 @@ fun SettingsScreen(
                     ) {
                         Text(
                             text = text.text,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = MaterialTheme.colorScheme.primary,
                             fontSize = 16.sp,
                             modifier = modifier
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.primaryContainer)
                                 .padding(vertical = 10.dp)
                         )
                     }
@@ -102,26 +103,21 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = modifier
                             .padding(horizontal = 15.dp)
-                            .padding( end = 20.dp)
-
+                            .padding(end = 20.dp)
                     ) {
                         Text(
                             text = "Dark Theme",
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = MaterialTheme.colorScheme.primary,
                             fontSize = 16.sp,
                             modifier = modifier
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.primaryContainer)
                                 .padding(vertical = 10.dp)
                         )
-                        var checked by remember {
-                            mutableStateOf(true)
-                        }
+                        val isChecked = remember { mutableStateOf(false) }
                         Switch(
-                            checked = checked,
-                            onCheckedChange = { checked = it },
+                            checked = isChecked.value,
+                            onCheckedChange = { isChecked.value = it},
                             modifier = modifier
-
                         )
                     }
                 }

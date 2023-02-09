@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.winter.chatsystem.components.LoginScreen
 import com.winter.chatsystem.components.SettingsScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
@@ -45,10 +46,13 @@ fun AppScreen(
     
     NavHost(
         navController = navController,
-        startDestination = "settings"
+        startDestination = "login"
     ) {
         composable("settings") {
             SettingsScreen(navController)
+        }
+        composable("login") {
+            LoginScreen(navController)
         }
     }
 }
