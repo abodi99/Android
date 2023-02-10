@@ -24,9 +24,6 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var checked by remember {
-        mutableStateOf(true)
-    }
 
     Box(
         modifier = modifier
@@ -34,16 +31,6 @@ fun LoginScreen(
             .padding(16.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        IconButton(
-            onClick = { navController.popBackStack() }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = ("ArrowBack"),
-                tint = MaterialTheme.colorScheme.secondary,
-                
-            )
-        }
         Text(
             text = "Login",
             style = MaterialTheme.typography.headlineLarge,
@@ -103,7 +90,9 @@ fun LoginScreen(
                     .padding(top = 30.dp)
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
-                onClick = { /*TODO*/ }
+                onClick = {
+                    navController.navigate("settings")
+                }
             ) {
                 Text(
                     text = "Login",

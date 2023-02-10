@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.winter.chatsystem.components.AccountSettingsScreen
 import com.winter.chatsystem.components.LoginScreen
 import com.winter.chatsystem.components.SettingsScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
@@ -53,6 +54,9 @@ fun AppScreen(
         }
         composable("login") {
             LoginScreen(navController)
+        }
+        composable("accountSettings") {
+            AccountSettingsScreen(navController)
         }
     }
 }
