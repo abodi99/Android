@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 fun SettingsScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
-
 ) {
     Box(
         modifier = Modifier
@@ -39,20 +38,21 @@ fun SettingsScreen(
             ,
     
     ) {
+        IconButton(
+            onClick = { navController.popBackStack() }
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = ("ArrowBack"),
+                tint = MaterialTheme.colorScheme.secondary,
+            )
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,//Keep text centered
+            horizontalArrangement = Arrangement.SpaceAround,
             modifier = modifier
                 .fillMaxWidth()
         ) {
-            IconButton(
-                onClick = { navController.popBackStack() }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = ("ArrowBack"),
-                    tint = MaterialTheme.colorScheme.secondary,
-                )
-            }
             //Spacer(modifier = modifier.weight(1f))
             Text(
                 text = "Settings",
@@ -71,11 +71,9 @@ fun SettingsScreen(
                 Card(
                     modifier = modifier
                         .padding(vertical = 3.dp)
-                        .clickable(
-                            onClick = {
-
-                            }
-                        ),
+                        .clickable {
+                            navController.navigate("accountSettings")
+                        },
                     shape = RoundedCornerShape(20.dp),
                 ) {
                     Row(
