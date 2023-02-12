@@ -1,6 +1,7 @@
 package com.winter.chatsystem.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -8,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +39,17 @@ fun SignUpScreen() {
             .background(color = MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "back",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .size(60.dp)
+                .padding(15.dp)
+                .clickable(onClick = {})
+
+        )
 
         Column(
             modifier = Modifier.fillMaxHeight(),
