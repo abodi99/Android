@@ -2,10 +2,9 @@ package com.winter.chatsystem.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,14 +23,23 @@ fun SignUpScreen() {
     var email by remember { mutableStateOf (TextFieldValue("")) }
     var passwordCreation by remember { mutableStateOf (TextFieldValue("")) }
     var passwordConfirmation by remember { mutableStateOf (TextFieldValue("")) }
-
-
+/*
+    Box(contentAlignment = Alignment.TopStart,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back", tint = Color.Black)
+    }
+    
+ */
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
+
         Column(
             modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
@@ -39,7 +47,8 @@ fun SignUpScreen() {
         ) {
             Box(contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxSize(0.27f)
+                    .fillMaxWidth(0.30f)
+                    .fillMaxHeight(0.15f)
             ) {
 
                 Text(
@@ -83,7 +92,6 @@ fun SignUpScreen() {
                 label = { Text("Password", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.fillMaxWidth(.8f),
                 singleLine = true,
-                placeholder = { Text(text = "Do your homework") },
                 colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -96,12 +104,46 @@ fun SignUpScreen() {
                 label = { Text("Confirm password", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.fillMaxWidth(.8f),
                 singleLine = true,
-                placeholder = { Text(text = "Do your homework") },
                 colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                 )
             )
+            Spacer(modifier = Modifier.fillMaxSize(0.10f))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                FloatingActionButton(onClick = { /*TODO*/ },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.fillMaxWidth(0.65f)) {
+                    Text(
+                        text = "Sign Up",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+
+                        )
+                }
+            }
+            
+        }
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier.fillMaxSize()
+            ) {
+            Row(modifier = Modifier.padding(bottom = 7.dp)) {
+                Text(text = "Already have an account?", modifier = Modifier.padding(top = 4.8.dp))
+                TextButton(onClick = { /*TODO*/ },
+                    modifier = Modifier.padding(bottom = 0.dp),
+                    contentPadding = PaddingValues(bottom = 15.dp)
+                ) {
+                    Text(text = "Sign In", color = MaterialTheme.colorScheme.primary)
+                }
+
+            }
         }
 
     }
