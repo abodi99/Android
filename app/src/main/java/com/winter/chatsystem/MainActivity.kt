@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.winter.chatsystem.components.OneToOne
+import com.winter.chatsystem.components.AccountSettingsScreen
+import com.winter.chatsystem.components.LoginScreen
 import com.winter.chatsystem.components.SettingsScreen
 import com.winter.chatsystem.components.SignUpScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
@@ -37,7 +39,6 @@ data class SettingsText(val text: String)
 var settingsText = listOf(
     SettingsText("Edit Profile"),
     SettingsText("Change Password"),
-    SettingsText("Dark Theme")
 )
 
 @Composable
@@ -48,10 +49,16 @@ fun AppScreen(
     
     NavHost(
         navController = navController,
-        startDestination = "settings"
+        startDestination = "login"
     ) {
         composable("settings") {
             SettingsScreen(navController)
+        }
+        composable("login") {
+            LoginScreen(navController)
+        }
+        composable("accountSettings") {
+            AccountSettingsScreen(navController)
         }
     }
 }
