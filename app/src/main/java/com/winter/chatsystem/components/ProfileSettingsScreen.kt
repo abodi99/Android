@@ -12,19 +12,18 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSettingsScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
@@ -35,15 +34,6 @@ fun AccountSettingsScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
-        IconButton(
-            onClick = { navController.navigate("settings") }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = ("ArrowBack"),
-                tint = MaterialTheme.colorScheme.secondary,
-            )
-        }
         Row(
             verticalAlignment = Alignment.CenterVertically,//Keep text centered
             horizontalArrangement = Arrangement.SpaceAround,
@@ -57,6 +47,16 @@ fun AccountSettingsScreen(
                 style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
                 fontSize = 36.sp,
+            )
+        }
+
+        IconButton(
+            onClick = { navController.popBackStack() }
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = ("ArrowBack"),
+                tint = MaterialTheme.colorScheme.secondary,
             )
         }
 
