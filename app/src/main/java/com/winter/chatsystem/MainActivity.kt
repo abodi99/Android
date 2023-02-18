@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    OneToOne()
+                    AppScreen()
                 }
             }
         }
@@ -49,7 +49,7 @@ fun AppScreen(
     
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "chat"
     ) {
         composable("settings") {
             SettingsScreen(navController)
@@ -59,6 +59,10 @@ fun AppScreen(
         }
         composable("accountSettings") {
             AccountSettingsScreen(navController)
+        }
+        composable("chat") {
+            //val id = it.arguments!!.getString("id")!!.toInt()
+            OneToOne(navController)
         }
     }
 }
