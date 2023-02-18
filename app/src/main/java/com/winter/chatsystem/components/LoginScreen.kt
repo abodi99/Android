@@ -91,7 +91,7 @@ fun LoginScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
                 onClick = {
-                    navController.navigate("chat")
+                    navController.navigate("settings")
                 }
             ) {
                 Text(
