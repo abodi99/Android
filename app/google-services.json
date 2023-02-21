@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "898331155068",
+    "project_id": "android-chat101",
+    "storage_bucket": "android-chat101.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898331155068:android:57f0a74054bcf2f0a187f9",
+        "android_client_info": {
+          "package_name": "com.winter.chatsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898331155068-q8ntgpvpcdp9uc0m8ah5n8viib98afor.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.winter.chatsystem",
+            "certificate_hash": "b2e4000675390d0edf26d519e5735a573e4294a3"
+          }
+        },
+        {
+          "client_id": "898331155068-ndk0uno6l9gk5e5j7qtgud8aeul0vlvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-w4SgCRgBdoqimq3Yd3U7D7mwxNtS7eQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898331155068-ndk0uno6l9gk5e5j7qtgud8aeul0vlvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
