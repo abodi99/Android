@@ -1,12 +1,12 @@
 package com.winter.chatsystem.components
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,21 +29,20 @@ import com.winter.chatsystem.ui.theme.ChatSystemTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 
+
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OneToOne(
     navController: NavHostController,
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        //  .padding(2.dp)
-        .background(color = MaterialTheme.colorScheme.surfaceVariant)
-    ){
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    var selectedItem by remember { mutableStateOf(0) }
+    val items = listOf("Settings", "Chat", "Profile")
+
+    Scaffold(
+        topBar = {
             Row(modifier = Modifier
                 .background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
@@ -58,28 +57,30 @@ fun OneToOne(
                 Image(painter = painterResource(id = R.drawable.profile_pic),
                     contentDescription = "ProfileImg",
                     modifier = Modifier
-                        .padding(5.dp)
+                        .padding(6.dp)
                         .clip(CircleShape)
                         .border(
                             width = 4.dp,
                             MaterialTheme.colorScheme.onPrimary,
                             shape = CircleShape
                         )
-                    //.size(55.dp)
                 )
                 Text(text = "Talal",
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 20.sp,
                     modifier = Modifier
-                        .padding(bottom = 12.dp)
                 )
             }
-            LazyColumn(modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.surfaceVariant)
-                .fillMaxWidth()
-                .fillMaxHeight(0.81f),
-                ){
+        },
+        content = { (4)
+            LazyColumn(
+                modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(top = 60.dp, bottom = 40.dp),
+            ){
                 items(20){ item ->
                     if (item % 2 == 0) {
                         Box(modifier = Modifier.fillMaxWidth(),
@@ -90,7 +91,7 @@ fun OneToOne(
                                     .width(270.dp)
                                     .wrapContentSize(Alignment.CenterStart),
                                 color = MaterialTheme.colorScheme.secondary,
-                                shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 25.dp, bottomStart = 50.dp, topStart = 5.dp),
+                                shape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 50.dp, bottomStart = 15.dp, topStart = 15.dp),
                                 shadowElevation = 0.dp
                             ) {
                                 Text(text = "Hello, whats up?",
@@ -99,8 +100,8 @@ fun OneToOne(
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(4.dp)
-                                      //  .height(35.dp)
+                                        .padding(6.dp)
+                                        //  .height(35.dp)
                                         .wrapContentSize(),
                                     textAlign = TextAlign.Justify
                                 )
@@ -116,7 +117,7 @@ fun OneToOne(
                                     .wrapContentSize(Alignment.CenterEnd),
 
                                 color = MaterialTheme.colorScheme.surfaceTint,
-                                shape = RoundedCornerShape(topEnd = 45.dp, bottomEnd = 5.dp, bottomStart = 40.dp, topStart = 25.dp),
+                                shape = RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp, bottomStart = 50.dp, topStart = 10.dp),
                                 shadowElevation = 0.dp
                             ) {
                                 Text(text = "Hi, how you doing?",
@@ -125,8 +126,8 @@ fun OneToOne(
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(4.dp)
-                                     //   .height(35.dp)
+                                        .padding(6.dp)
+                                        //   .height(35.dp)
                                         .wrapContentSize(),
                                     textAlign = TextAlign.Start
                                 )
@@ -135,7 +136,9 @@ fun OneToOne(
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
+            //Spacer(modifier = Modifier.weight(1f))
+        },
+        bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -145,10 +148,9 @@ fun OneToOne(
                 Column {
                     Row(
                         modifier = Modifier
-                            //    .background(MaterialTheme.colorScheme.primary)
+                            .background(MaterialTheme.colorScheme.surface)
                             .fillMaxWidth()
-                            .height(65.dp),
-
+                            .height(75.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
@@ -157,14 +159,14 @@ fun OneToOne(
                             modifier = Modifier
                                 .padding(start = 6.dp, end = 6.dp)
                                 .size(30.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                         var textFieldValue by remember { mutableStateOf("") }
 
                         OutlinedTextField(value = textFieldValue,
                             onValueChange = {textFieldValue = it},
-                           // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
-                            placeholder = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                            // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                            placeholder = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onTertiary)},
                             modifier = Modifier
                                 .width(280.dp)
                                 .padding(bottom = 4.5.dp),
@@ -178,48 +180,71 @@ fun OneToOne(
                             trailingIcon = { Icon(
                                 imageVector = Icons.Default.Send,
                                 contentDescription = "Send",
-                                tint = MaterialTheme.colorScheme.onPrimary
+                                tint = MaterialTheme.colorScheme.onPrimary,
                             )},
-                            colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = MaterialTheme.colorScheme.primary, containerColor = MaterialTheme.colorScheme.primary)
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                textColor = MaterialTheme.colorScheme.onTertiary,
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+                                containerColor = MaterialTheme.colorScheme.primaryContainer)
                         )
                         Icon(
                             Icons.Default.AddCircle, contentDescription = "Mic",
                             modifier = Modifier
                                 .padding(start = 6.dp, end = 6.dp)
                                 .size(35.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                     }
 
-                    Row(
+                    NavigationBar(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary)
-                            .fillMaxWidth()
-                            .height(62.dp),
-
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                            .height(80.dp)
                     ) {
-                        Button(onClick = { /*TODO*/ }) {
-                            Icon(
-                                Icons.Default.Person, contentDescription = "Mic",
-                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                                tint = MaterialTheme.colorScheme.onPrimary
+                        items.forEachIndexed { index, item ->
+                            NavigationBarItem(
+                                icon = {
+                                    if (index == 0) {
+                                        Icon(
+                                            Icons.Filled.Settings,
+                                            contentDescription = item,
+                                            //tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    } else if (index == 1) {
+                                        Icon(
+                                            Icons.Filled.Home,
+                                            contentDescription = item,
+                                            //tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    } else {
+                                        Icon(
+                                            Icons.Filled.Person,
+                                            contentDescription = item,
+                                            //tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
+                                },
+                                label = { Text(item)},
+                                selected = selectedItem == index,
+                                onClick = {
+                                    selectedItem = index
+                                },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                                    unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                                    unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                                    indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                                ),
+                                modifier = Modifier
+                                    .fillMaxHeight()
                             )
-                            Text(text = "Profile")
-                        }
-
-                        Button(onClick = { /*TODO*/ }) {
-                            Icon(
-                                Icons.Default.Settings, contentDescription = "Mic",
-                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                                tint = MaterialTheme.colorScheme.onPrimary
-                            )
-                            Text(text = "Settings")
                         }
                     }
                 }
             }
         }
-    }
+    )
 }
