@@ -41,6 +41,7 @@ var settingsText = listOf(
     SettingsText("Change Password"),
 )
 
+
 @Composable
 fun AppScreen(
     modifier: Modifier = Modifier
@@ -57,7 +58,7 @@ fun AppScreen(
         composable("login") {
             LoginScreen(navController)
         }
-        composable("accountSettings") {
+        composable("profile") {
             AccountSettingsScreen(navController)
         }
         composable("chat") {
