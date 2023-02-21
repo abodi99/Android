@@ -36,7 +36,7 @@ fun SignUpScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surfaceVariant),
+            .background(color = MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
         Icon(
