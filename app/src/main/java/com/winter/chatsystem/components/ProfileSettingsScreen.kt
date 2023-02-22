@@ -1,5 +1,6 @@
 package com.winter.chatsystem.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSettingsScreen(
@@ -28,101 +30,106 @@ fun AccountSettingsScreen(
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,//Keep text centered
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            //Spacer(modifier = modifier.weight(1f))
-            Text(
-                text = "Profile Settings",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-                fontSize = 36.sp,
-            )
-        }
-
-        IconButton(
-            onClick = { navController.popBackStack() }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = ("ArrowBack"),
-                tint = MaterialTheme.colorScheme.secondary,
-            )
-        }
-
-        LazyColumn(
-            modifier = Modifier
-
-        ) {
-            item {
+    Scaffold(
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(16.dp)
+            ) {
                 Row(
+                    verticalAlignment = Alignment.CenterVertically,//Keep text centered
+                    horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 100.dp, bottom = 60.dp)
-                        .border(0.8.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(20.dp))
-                        .clickable(
-                            onClick = {
-                                // Change picture
-                            }
-                        ),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    //Spacer(modifier = modifier.weight(1f))
+                    Text(
+                        text = "Profile Settings",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.headlineMedium,
+                        textAlign = TextAlign.Center,
+                        fontSize = 36.sp,
+                    )
+                }
+
+                IconButton(
+                    onClick = { navController.popBackStack() }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = null,
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = ("ArrowBack"),
                         tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier
-                            .size(200.dp)
                     )
                 }
-            }
-            item {
-                Row(
+
+                LazyColumn(
                     modifier = Modifier
-                        .padding(top = 10.dp, bottom = 10.dp),
+
                 ) {
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { input ->
-                            email = input
-                        },
-                        label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
-                        placeholder = { Text(text = "Watt101")},
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 100.dp, bottom = 60.dp)
+                                .border(0.8.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(20.dp))
+                                .clickable(
+                                    onClick = {
+                                        // Change picture
+                                    }
+                                ),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier
+                                    .size(200.dp)
+                            )
+                        }
+                    }
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 10.dp, bottom = 10.dp),
+                        ) {
+                            OutlinedTextField(
+                                value = email,
+                                onValueChange = { input ->
+                                    email = input
+                                },
+                                label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
+                                placeholder = { Text(text = "Watt101")},
+                                singleLine = true,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 10.dp, bottom = 10.dp),
+                        ) {
+                            OutlinedTextField(
+                                value = password,
+                                onValueChange = { input ->
+                                    password = input
+                                },
+                                label = { Text(text = "Password", color = MaterialTheme.colorScheme.primary) },
+                                placeholder = { Text(text = "example@gmail.com")},
+                                singleLine = true,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                            )
+                        }
+                    }
                 }
             }
-            item {
-                Row(
-                    modifier = Modifier
-                        .padding(top = 10.dp, bottom = 10.dp),
-                ) {
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { input ->
-                            password = input
-                        },
-                        label = { Text(text = "Password", color = MaterialTheme.colorScheme.primary) },
-                        placeholder = { Text(text = "example@gmail.com")},
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
-                }
-            }
-        }
-    }
+        },
+        bottomBar = { BottomNavBar(navController) },
+    )
 }

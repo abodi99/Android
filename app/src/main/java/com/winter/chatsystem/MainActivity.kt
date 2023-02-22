@@ -1,21 +1,25 @@
 package com.winter.chatsystem
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.winter.chatsystem.components.OneToOne
-import com.winter.chatsystem.components.AccountSettingsScreen
-import com.winter.chatsystem.components.LoginScreen
-import com.winter.chatsystem.components.SettingsScreen
-import com.winter.chatsystem.components.SignUpScreen
+import com.winter.chatsystem.components.*
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +46,8 @@ var settingsText = listOf(
 )
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScreen(
     modifier: Modifier = Modifier

@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -39,9 +40,6 @@ import java.util.*
 fun OneToOne(
     navController: NavHostController,
 ) {
-    var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Settings", "Chat", "Profile")
-
     Scaffold(
         topBar = {
             Row(modifier = Modifier
@@ -61,16 +59,18 @@ fun OneToOne(
                             }
                         )
                 )
-                Image(painter = painterResource(id = R.drawable.profile_pic),
-                    contentDescription = "ProfileImg",
+                Icon(
+                    Icons.Rounded.AccountCircle,
+                    contentDescription = "back",
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                        .padding(6.dp)
-                        .clip(CircleShape)
-                        .border(
-                            width = 4.dp,
-                            MaterialTheme.colorScheme.onPrimary,
-                            shape = CircleShape
-                        )
+                            .padding(6.dp)
+                            .clip(CircleShape)
+                            .border(
+                                width = 4.dp,
+                                MaterialTheme.colorScheme.onPrimary,
+                                shape = CircleShape
+                            )
                 )
                 Text(text = "Talal",
                     fontWeight = FontWeight.Bold,
@@ -203,54 +203,7 @@ fun OneToOne(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-
-                NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier
-                        .height(80.dp)
-                ) {
-                    items.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            icon = {
-                                if (index == 0) {
-                                    Icon(
-                                        Icons.Filled.Settings,
-                                        contentDescription = item,
-                                        //tint = MaterialTheme.colorScheme.onPrimary
-                                    )
-                                } else if (index == 1) {
-                                    Icon(
-                                        Icons.Filled.Home,
-                                        contentDescription = item,
-                                        //tint = MaterialTheme.colorScheme.onPrimary
-                                    )
-                                } else {
-                                    Icon(
-                                        Icons.Filled.Person,
-                                        contentDescription = item,
-                                        //tint = MaterialTheme.colorScheme.onPrimary
-                                    )
-                                }
-                            },
-                            label = { Text(item)},
-                            selected = selectedItem == index,
-                            onClick = {
-                                selectedItem = index
-                                navController.navigate(item.lowercase())
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                                unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                                unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer
-                            ),
-                            modifier = Modifier
-                                .fillMaxHeight()
-                        )
-                    }
-                }
+                BottomNavBar(navController)
             }
         }
     )
