@@ -45,7 +45,8 @@ fun OneToOne(
             Row(modifier = Modifier
                 .background(MaterialTheme.colorScheme.primary)
                 .fillMaxWidth()
-                .height(60.dp),
+                .height(60.dp)
+                .padding(start = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
@@ -64,13 +65,14 @@ fun OneToOne(
                     contentDescription = "back",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                            .padding(6.dp)
-                            .clip(CircleShape)
-                            .border(
-                                width = 4.dp,
-                                MaterialTheme.colorScheme.onPrimary,
-                                shape = CircleShape
-                            )
+                        .size(45.dp)
+                        .padding(6.dp)
+                        .clip(CircleShape)
+                        .border(
+                            width = 4.dp,
+                            MaterialTheme.colorScheme.onPrimary,
+                            shape = CircleShape
+                        )
                 )
                 Text(text = "Talal",
                     fontWeight = FontWeight.Bold,
@@ -86,7 +88,7 @@ fun OneToOne(
                     .background(color = MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(top = 60.dp, bottom = 60.dp),
+                    .padding(top = 60.dp, bottom = 180.dp),
             ){
                 items(20){ item ->
                     if (item % 2 == 0) {
@@ -146,12 +148,15 @@ fun OneToOne(
             //Spacer(modifier = Modifier.weight(1f))
         },
         bottomBar = {
-            Column {
+            Column(
+                modifier = Modifier
+
+            ) {
                 Row(
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.surface)
                         .fillMaxWidth()
-                        .height(75.dp),
+                        .height(95.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
@@ -164,7 +169,8 @@ fun OneToOne(
                     )
                     var textFieldValue by remember { mutableStateOf("") }
 
-                    OutlinedTextField(value = textFieldValue,
+                    OutlinedTextField(
+                        value = textFieldValue,
                         onValueChange = {textFieldValue = it},
                         // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
                         placeholder = { Text(text = "Write your message",

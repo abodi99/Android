@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen() {
 
@@ -84,7 +85,6 @@ fun SignUpScreen() {
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                     )
             )
-
 
             OutlinedTextField(
                 value = email,
@@ -157,15 +157,5 @@ fun SignUpScreen() {
             }
         }
 
-    }
-
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpPreview() {
-    ChatSystemTheme {
-        SignUpScreen()
     }
 }
