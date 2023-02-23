@@ -54,22 +54,30 @@ fun AppScreen(
 ) {
     val navController = rememberNavController()
     
-    NavHost(
-        navController = navController,
-        startDestination = "chat"
-    ) {
-        composable("settings") {
-            SettingsScreen(navController)
-        }
-        composable("login") {
-            LoginScreen(navController)
-        }
-        composable("profile") {
-            AccountSettingsScreen(navController)
-        }
-        composable("chat") {
-            //val id = it.arguments!!.getString("id")!!.toInt()
-            OneToOne(navController)
-        }
-    }
+    Scaffold(
+        content = {
+            NavHost(
+                navController = navController,
+                startDestination = "chat"
+            ) {
+                composable("settings") {
+                    SettingsScreen(navController)
+                }
+                composable("login") {
+                    LoginScreen(navController)
+                }
+                composable("signup") {
+                    SignUpScreen()
+                }
+                composable("profile") {
+                    AccountSettingsScreen(navController)
+                }
+                composable("chat") {
+                    //val id = it.arguments!!.getString("id")!!.toInt()
+                    OneToOne(navController)
+                }
+            }
+        },
+        //bottomBar = { BottomNavBar(navController) }
+    )
 }

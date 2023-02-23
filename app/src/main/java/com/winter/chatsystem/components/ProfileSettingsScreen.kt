@@ -55,7 +55,7 @@ fun AccountSettingsScreen(
                 }
 
                 IconButton(
-                    onClick = { navController.popBackStack() }
+                    onClick = { navController.navigate("settings") }
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -85,7 +85,7 @@ fun AccountSettingsScreen(
                             Icon(
                                 imageVector = Icons.Default.AccountCircle,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary,
+                                tint = MaterialTheme.colorScheme.primaryContainer,
                                 modifier = Modifier
                                     .size(200.dp)
                             )
