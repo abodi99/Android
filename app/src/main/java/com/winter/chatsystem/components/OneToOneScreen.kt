@@ -1,8 +1,6 @@
 package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,18 +17,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
-import com.winter.chatsystem.R
-import com.winter.chatsystem.ui.theme.ChatSystemTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.ui.text.toLowerCase
 import java.util.*
 
 
@@ -39,14 +30,17 @@ import java.util.*
 @Composable
 fun OneToOne(
     navController: NavHostController,
+    id: Int
 ) {
+
     Scaffold(
         topBar = {
-            Row(modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary)
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(start = 12.dp),
+            Row(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primary)
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding( bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
@@ -82,13 +76,12 @@ fun OneToOne(
                 )
             }
         },
-        content = {
+        content = { padding ->
             LazyColumn(
                 modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(top = 60.dp, bottom = 180.dp),
+                    .padding(padding),
             ){
                 items(20){ item ->
                     if (item % 2 == 0) {
@@ -150,13 +143,11 @@ fun OneToOne(
         bottomBar = {
             Column(
                 modifier = Modifier
-
             ) {
                 Row(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
                         .fillMaxWidth()
-                        .height(95.dp),
+                        .height(69.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
@@ -193,8 +184,8 @@ fun OneToOne(
                         )},
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             textColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            //focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            //focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                             containerColor = MaterialTheme.colorScheme.primaryContainer,

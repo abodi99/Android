@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,7 @@ fun BottomNavBar(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    var selectedItem by remember { mutableStateOf(0) }
+    var selectedItem by rememberSaveable { mutableStateOf(1) }
     val items = listOf("Settings", "Chat", "Profile")
 
     NavigationBar() {
@@ -53,9 +54,9 @@ fun BottomNavBar(
                     },
                     label = {
                         if (selectedItem == index) {
-                            Text(text = item, fontWeight = FontWeight.ExtraBold)
+                            Text(item, fontWeight = FontWeight.ExtraBold)
                         } else {
-                            Text(text = item)
+                            Text(item)
                         }
                     },
                     selected = selectedItem == index,
