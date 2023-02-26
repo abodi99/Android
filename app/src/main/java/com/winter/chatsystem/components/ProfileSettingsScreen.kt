@@ -19,6 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,22 +29,39 @@ fun AccountSettingsScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
+    var newEmail by remember { mutableStateOf(TextFieldValue("")) }
+    var newDisplayName by remember { mutableStateOf(TextFieldValue("")) }
+
+    val auth = Firebase.auth
+    val currentUser = auth.currentUser
+    var email = currentUser?.email
+    var displayName = currentUser?.displayName
+
 
     Scaffold(
-        content = {
+        content = { paddingV ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(16.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                    .padding(bottom = paddingV.calculateBottomPadding())
             ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = ("ArrowBack"),
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable(
+                            onClick = { navController.navigate("settings") }
+                        )
+                )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,//Keep text centered
                     horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .align(Alignment.TopCenter)
                 ) {
                     //Spacer(modifier = modifier.weight(1f))
                     Text(
@@ -51,16 +70,6 @@ fun AccountSettingsScreen(
                         style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center,
                         fontSize = 36.sp,
-                    )
-                }
-
-                IconButton(
-                    onClick = { navController.navigate("settings") }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = ("ArrowBack"),
-                        tint = MaterialTheme.colorScheme.secondary,
                     )
                 }
 
@@ -73,7 +82,11 @@ fun AccountSettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 100.dp, bottom = 60.dp)
-                                .border(0.8.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(20.dp))
+                                .border(
+                                    0.8.dp,
+                                    MaterialTheme.colorScheme.outline,
+                                    shape = RoundedCornerShape(20.dp)
+                                )
                                 .clickable(
                                     onClick = {
                                         // Change picture
@@ -97,12 +110,12 @@ fun AccountSettingsScreen(
                                 .padding(top = 10.dp, bottom = 10.dp),
                         ) {
                             OutlinedTextField(
-                                value = email,
+                                value = newDisplayName,
                                 onValueChange = { input ->
-                                    email = input
+                                    newDisplayName = input
                                 },
-                                label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
-                                placeholder = { Text(text = "Watt101")},
+                                label = { Text(text = "Username", color = MaterialTheme.colorScheme.primary) },
+                                placeholder = { Text(displayName.toString())},
                                 singleLine = true,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -115,12 +128,12 @@ fun AccountSettingsScreen(
                                 .padding(top = 10.dp, bottom = 10.dp),
                         ) {
                             OutlinedTextField(
-                                value = password,
+                                value = newEmail,
                                 onValueChange = { input ->
-                                    password = input
+                                    newEmail = input
                                 },
-                                label = { Text(text = "Password", color = MaterialTheme.colorScheme.primary) },
-                                placeholder = { Text(text = "example@gmail.com")},
+                                label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
+                                placeholder = { Text(email.toString())},
                                 singleLine = true,
                                 modifier = Modifier
                                     .fillMaxWidth(),

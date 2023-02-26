@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +26,8 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
+
+    val auth = Firebase.auth
 
     Box(
         modifier = modifier
@@ -91,7 +95,14 @@ fun LoginScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
                 onClick = {
-                    navController.navigate("chat")
+                    auth.signInWithEmailAndPassword(email.text, password.text)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                navController.navigate("chat")
+                            } else {
+                                println("Failed to navigate to chat")
+                            }
+                        }
                 }
             ) {
                 Text(

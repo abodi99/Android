@@ -33,39 +33,35 @@ fun SettingsScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        topBar = {
+             Row(
+                 modifier = Modifier
+                     .background(MaterialTheme.colorScheme.primary)
+             ) {
+                 Row(
+                     verticalAlignment = Alignment.CenterVertically,//Keep text centered
+                     horizontalArrangement = Arrangement.SpaceAround,
+                     modifier = modifier
+                         .fillMaxWidth()
+                         .padding(bottom = 10.dp)
+                 ) {
+                     //Spacer(modifier = modifier.weight(1f))
+                     Text(
+                         text = "Settings",
+                         color = MaterialTheme.colorScheme.onPrimary,
+                         style = MaterialTheme.typography.headlineMedium,
+                         textAlign = TextAlign.Center,
+                         fontSize = 36.sp,
+                     )
+                 }
+             }
+        },
         content = {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(16.dp)
-                ,
-
+                    .padding(16.dp),
                 ) {
-                IconButton(
-                    onClick = { navController.popBackStack() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = ("ArrowBack"),
-                        tint = MaterialTheme.colorScheme.secondary,
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,//Keep text centered
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = modifier
-                        .fillMaxWidth()
-                ) {
-                    //Spacer(modifier = modifier.weight(1f))
-                    Text(
-                        text = "Settings",
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.headlineMedium,
-                        textAlign = TextAlign.Center,
-                        fontSize = 36.sp,
-                    )
-                }
                 LazyColumn(
                     modifier = modifier
                         .align(Alignment.TopCenter)
@@ -76,9 +72,13 @@ fun SettingsScreen(
                             modifier = modifier
                                 .padding(vertical = 3.dp)
                                 .clickable {
-                                    navController.navigate("accountSettings")
+                                    navController.navigate("profile")
                                 },
                             shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer
+                            )
+
                         ) {
                             Row(
                                 modifier = modifier
@@ -86,7 +86,7 @@ fun SettingsScreen(
                             ) {
                                 Text(
                                     text = text.text,
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     fontSize = 16.sp,
                                     modifier = modifier
                                         .fillMaxWidth()
@@ -99,7 +99,10 @@ fun SettingsScreen(
                         Card(
                             shape = RoundedCornerShape(20.dp),
                             modifier = modifier
-                                .padding(vertical = 3.dp)
+                                .padding(vertical = 3.dp),
+                            colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                            )
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -109,7 +112,7 @@ fun SettingsScreen(
                             ) {
                                 Text(
                                     text = "Dark Theme",
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     fontSize = 16.sp,
                                     modifier = modifier
                                         .fillMaxWidth()
