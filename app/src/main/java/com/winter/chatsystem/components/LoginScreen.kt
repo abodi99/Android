@@ -12,6 +12,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -89,12 +90,14 @@ fun LoginScreen(
                 modifier = modifier
             )
 
-            Button(
-                modifier = modifier
-                    .padding(top = 30.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(),
-                onClick = {
+            Spacer(modifier = Modifier.fillMaxSize(0.10f))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                FloatingActionButton(onClick = {
                     auth.signInWithEmailAndPassword(email.text, password.text)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -103,14 +106,33 @@ fun LoginScreen(
                                 println("Failed to navigate to chat")
                             }
                         }
+                },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.fillMaxWidth(0.65f)) {
+                    Text(
+                        text = "Sign Up",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+
+                    )
                 }
+            }
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+
+        ) {
+            Text(text = "Don't have an account?", modifier = Modifier.padding(top = 5.9.dp))
+            TextButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.padding(bottom = 0.dp),
+                contentPadding = PaddingValues(bottom = 15.dp)
             ) {
-                Text(
-                    text = "Login",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = modifier
-                )
+                Text(text = "Sign up", color = MaterialTheme.colorScheme.primary)
             }
         }
     }

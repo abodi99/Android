@@ -14,6 +14,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,6 +26,11 @@ fun SignUpScreen() {
     var email by remember { mutableStateOf (TextFieldValue("")) }
     var passwordCreation by remember { mutableStateOf (TextFieldValue("")) }
     var passwordConfirmation by remember { mutableStateOf (TextFieldValue("")) }
+
+    var newEmail by remember { mutableStateOf(TextFieldValue("")) }
+    var password by remember { mutableStateOf(TextFieldValue("")) }
+
+    val auth = Firebase.auth
 /*
     Box(contentAlignment = Alignment.TopStart,
         modifier = Modifier
@@ -40,7 +47,7 @@ fun SignUpScreen() {
             .background(color = MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
+        /*Icon(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "back",
             tint = MaterialTheme.colorScheme.primary,
@@ -51,6 +58,7 @@ fun SignUpScreen() {
                 .clickable(onClick = {})
 
         )
+         */
 
         Column(
             modifier = Modifier.fillMaxHeight(),
