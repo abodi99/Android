@@ -1,26 +1,24 @@
 package com.winter.chatsystem.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    navController: NavHostController
+) {
 
     var userName by remember { mutableStateOf (TextFieldValue("")) }
     var email by remember { mutableStateOf (TextFieldValue("")) }
@@ -77,8 +75,6 @@ fun SignUpScreen() {
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
-
-
                 )
             }
 
@@ -88,10 +84,11 @@ fun SignUpScreen() {
                 label = { Text("Username", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.fillMaxWidth(.8f),
                 singleLine = true,
-                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
-                    )
+                )
             )
 
             OutlinedTextField(
@@ -100,10 +97,12 @@ fun SignUpScreen() {
                 label = { Text("Email", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.fillMaxWidth(.8f),
                 maxLines = 3,
-                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
-                )            )
+                )
+            )
 
             OutlinedTextField(
                 value = passwordCreation,
@@ -111,7 +110,7 @@ fun SignUpScreen() {
                 label = { Text("Password", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.fillMaxWidth(.8f),
                 singleLine = true,
-                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.outlinedTextFieldColors(focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                 )
@@ -123,7 +122,7 @@ fun SignUpScreen() {
                 label = { Text("Confirm password", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.fillMaxWidth(.8f),
                 singleLine = true,
-                colors = TextFieldDefaults.outlinedTextFieldColors(textColor = MaterialTheme.colorScheme.onPrimary,
+                colors = TextFieldDefaults.outlinedTextFieldColors(focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                 )
@@ -155,7 +154,9 @@ fun SignUpScreen() {
             ) {
             Row(modifier = Modifier.padding(bottom = 7.dp)) {
                 Text(text = "Already have an account?", modifier = Modifier.padding(top = 4.8.dp))
-                TextButton(onClick = { /*TODO*/ },
+                TextButton(onClick = {
+                    navController.navigate("login")
+                },
                     modifier = Modifier.padding(bottom = 0.dp),
                     contentPadding = PaddingValues(bottom = 15.dp)
                 ) {
