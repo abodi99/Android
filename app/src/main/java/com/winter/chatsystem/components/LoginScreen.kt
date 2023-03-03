@@ -110,7 +110,7 @@ fun LoginScreen(
                     containerColor = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.fillMaxWidth(0.65f)) {
                     Text(
-                        text = "Sign Up",
+                        text = "Sign In",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimary
@@ -128,7 +128,9 @@ fun LoginScreen(
         ) {
             Text(text = "Don't have an account?", modifier = Modifier.padding(top = 5.9.dp))
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate("signup")
+                },
                 modifier = Modifier.padding(bottom = 0.dp),
                 contentPadding = PaddingValues(bottom = 15.dp)
             ) {

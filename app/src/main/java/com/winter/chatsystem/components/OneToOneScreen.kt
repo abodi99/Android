@@ -183,13 +183,13 @@ fun OneToOne(
                             //tint = MaterialTheme.colorScheme.onPrimary,
                         )},
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            textColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             //focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             //focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            placeholderColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     )
                     Icon(

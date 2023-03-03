@@ -14,6 +14,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,22 +50,21 @@ fun AccountSettingsScreen(
                     .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                     .padding(bottom = paddingV.calculateBottomPadding())
             ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = ("ArrowBack"),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .clickable(
-                            onClick = { navController.navigate("settings") }
-                        )
-                )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,//Keep text centered
                     horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                 ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = ("ArrowBack"),
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier
+                            .clickable(
+                                onClick = { navController.navigate("settings") }
+                            )
+                    )
                     //Spacer(modifier = modifier.weight(1f))
                     Text(
                         text = "Profile Settings",
@@ -114,9 +116,10 @@ fun AccountSettingsScreen(
                                 onValueChange = { input ->
                                     newDisplayName = input
                                 },
-                                label = { Text(text = "Username", color = MaterialTheme.colorScheme.primary) },
+                                //label = { Text(text = "Username", color = MaterialTheme.colorScheme.primary) },
                                 placeholder = { Text(displayName.toString())},
                                 singleLine = true,
+                                readOnly = true,
                                 modifier = Modifier
                                     .fillMaxWidth()
                             )
@@ -132,12 +135,60 @@ fun AccountSettingsScreen(
                                 onValueChange = { input ->
                                     newEmail = input
                                 },
-                                label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
+                                //label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
                                 placeholder = { Text(email.toString())},
                                 singleLine = true,
+                                readOnly = true,
                                 modifier = Modifier
                                     .fillMaxWidth(),
                             )
+                        }
+                    }
+
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .padding(top = paddingV.calculateBottomPadding(), bottom = 13.dp)
+                        ) {
+                            FloatingActionButton(
+                                onClick = { /*TODO*/ },
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .size(45.dp)
+                            ) {
+                                Text(
+                                    text = "Edit",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier
+                                )
+                            }
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(bottom = paddingV.calculateBottomPadding())
+                        ) {
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate("login")
+                                },
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .size(45.dp)
+                            ) {
+                                Text(
+                                    text = "Logout",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onErrorContainer,
+                                    modifier = Modifier
+                                )
+                            }
                         }
                     }
                 }
