@@ -2,8 +2,11 @@ package com.winter.chatsystem.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,6 +16,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -28,12 +34,13 @@ fun LoginScreen(
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
+    var passwordVisibility by remember { mutableStateOf(false) }
+
     val auth = Firebase.auth
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
         Text(
@@ -46,11 +53,10 @@ fun LoginScreen(
                 .padding(top = 90.dp)
         )
         Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = 16.dp)
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Row(
                 modifier = modifier
                     .padding(top = 10.dp, bottom = 10.dp),
@@ -62,7 +68,7 @@ fun LoginScreen(
                     },
                     label = { Text(text = "Email") },
                     modifier = modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth(0.8f),
                 )
             }
             Row(
@@ -76,19 +82,31 @@ fun LoginScreen(
                     },
                     label = { Text(text = "Password") },
                     modifier = modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth(0.8f),
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password
+                    ),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                imageVector = if (passwordVisibility) Icons.Filled.Info else Icons.Default.Face,
+                                contentDescription = if (passwordVisibility) "Hide password" else "Show password"
+                            )
+                        }
+                    }
                 )
             }
             val isChecked = remember { mutableStateOf(false) }
 
-            Checkbox(
+            /*Checkbox(
                 checked = isChecked.value,
                 onCheckedChange = {
                     isChecked.value = it
                 },
                 enabled = true,
                 modifier = modifier
-            )
+            )*/
 
             Spacer(modifier = Modifier.fillMaxSize(0.10f))
 
@@ -108,7 +126,7 @@ fun LoginScreen(
                         }
                 },
                     containerColor = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.fillMaxWidth(0.65f)) {
+                    modifier = Modifier.fillMaxWidth(0.8f)) {
                     Text(
                         text = "Sign In",
                         fontSize = 20.sp,

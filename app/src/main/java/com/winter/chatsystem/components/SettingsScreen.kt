@@ -32,30 +32,8 @@ fun SettingsScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    var isDark = isSystemInDarkTheme()
     Scaffold(
-        topBar = {
-             Row(
-                 modifier = Modifier
-                     .background(MaterialTheme.colorScheme.primary)
-             ) {
-                 Row(
-                     verticalAlignment = Alignment.CenterVertically,//Keep text centered
-                     horizontalArrangement = Arrangement.SpaceAround,
-                     modifier = modifier
-                         .fillMaxWidth()
-                         .padding(bottom = 10.dp)
-                 ) {
-                     //Spacer(modifier = modifier.weight(1f))
-                     Text(
-                         text = "Settings",
-                         color = MaterialTheme.colorScheme.onPrimary,
-                         style = MaterialTheme.typography.headlineMedium,
-                         textAlign = TextAlign.Center,
-                         fontSize = 36.sp,
-                     )
-                 }
-             }
-        },
         content = {
             Box(
                 modifier = Modifier
@@ -121,7 +99,10 @@ fun SettingsScreen(
                                 val isChecked = remember { mutableStateOf(false) }
                                 Switch(
                                     checked = isChecked.value,
-                                    onCheckedChange = { isChecked.value = it},
+                                    onCheckedChange = {
+                                        isChecked.value = it
+                                        isDark = it
+                                    },
                                     modifier = modifier
                                 )
                             }
@@ -130,6 +111,6 @@ fun SettingsScreen(
                 }
             }
         },
-        bottomBar = { BottomNavBar(navController) }
+        //bottomBar = { BottomNavBar(navController) }
     )
 }

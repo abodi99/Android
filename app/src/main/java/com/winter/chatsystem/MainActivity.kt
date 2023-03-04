@@ -8,7 +8,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.TopAppBar
@@ -16,12 +20,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.firebase.FirebaseApp
 import com.winter.chatsystem.classes.NavigationItem
 import com.winter.chatsystem.components.*
@@ -39,7 +50,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     AppScreen()
                 }
@@ -54,7 +65,7 @@ var settingsText = listOf(
     SettingsText("Change Password"),
 )
 
-
+/*
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,10 +106,11 @@ fun AppScreen(
         //bottomBar = { BottomNavBar(navController) }
     )
 }
+*/
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BottomBarAnimationApp() {
+fun AppScreen() {
 
     // State of bottomBar, set state to false, if current page route is "car_details"
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
@@ -106,7 +118,7 @@ fun BottomBarAnimationApp() {
     // State of topBar, set state to false, if current page route is "car_details"
     val topBarState = rememberSaveable { (mutableStateOf(true)) }
 
-    BottomBarAnimationTheme {
+    ChatSystemTheme {
         val navController = rememberNavController()
 
         // Subscribe to navBackStackEntry, required to get current route
@@ -114,12 +126,7 @@ fun BottomBarAnimationApp() {
 
         // Control TopBar and BottomBar
         when (navBackStackEntry?.destination?.route) {
-            "cars" -> {
-                // Show BottomBar and TopBar
-                bottomBarState.value = true
-                topBarState.value = true
-            }
-            "bikes" -> {
+            "home" -> {
                 // Show BottomBar and TopBar
                 bottomBarState.value = true
                 topBarState.value = true
@@ -129,7 +136,22 @@ fun BottomBarAnimationApp() {
                 bottomBarState.value = true
                 topBarState.value = true
             }
-            "car_details" -> {
+            "profile" -> {
+                // Show BottomBar and TopBar
+                bottomBarState.value = true
+                topBarState.value = true
+            }
+            "chat/1" -> {
+                // Show BottomBar and TopBar
+                bottomBarState.value = true
+                topBarState.value = true
+            }
+            "signup" -> {
+                // Hide BottomBar and TopBar
+                bottomBarState.value = false
+                topBarState.value = false
+            }
+            "login" -> {
                 // Hide BottomBar and TopBar
                 bottomBarState.value = false
                 topBarState.value = false
@@ -157,7 +179,7 @@ fun BottomBarAnimationApp() {
             content = {
                 NavHost(
                     navController = navController,
-                    startDestination = NavigationItem.Home.route,
+                    startDestination = "signup",
                 ) {
                     composable(NavigationItem.Home.route) {
                         // show BottomBar and TopBar
@@ -187,6 +209,16 @@ fun BottomBarAnimationApp() {
                         }
                         SettingsScreen(
                             navController = navController,
+                        )
+                    }
+                    composable("chat/1") {
+                        // show BottomBar and TopBar
+                        LaunchedEffect(Unit) {
+                            bottomBarState.value = true
+                            topBarState.value = false
+                        }
+                        OneToOne(
+                            navController = navController, 1
                         )
                     }
                     composable("login") {
@@ -229,12 +261,14 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
         enter = slideInVertically(initialOffsetY = { it }),
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
-            BottomNavigation() {
+            NavigationBar(
+                tonalElevation = 10.dp
+            ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
                 items.forEach { item ->
-                    BottomNavigationItem(
+                    NavigationBarItem(
                         icon = {
                             Icon(
                                 item.icon,
@@ -251,7 +285,11 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
+
+                        )
                     )
                 }
             }
@@ -259,16 +297,17 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
 @Composable
 fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val title: String = when (navBackStackEntry?.destination?.route ?: "cars") {
-        "cars" -> "Cars"
-        "bikes" -> "Bikes"
+    val title: String = when (navBackStackEntry?.destination?.route ?: "home") {
+        "home" -> "Home"
+        "profile" -> "Profile"
         "settings" -> "Settings"
-        "car_details" -> "Cars"
-        else -> "Cars"
+        "chat/1" -> "Chat"
+        else -> "Home"
     }
 
     AnimatedVisibility(
@@ -276,8 +315,28 @@ fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
         enter = slideInVertically(initialOffsetY = { -it }),
         exit = slideOutVertically(targetOffsetY = { -it }),
         content = {
-            TopAppBar(
-                title = { Text(text = title) },
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = title,
+                        fontSize = 27.sp,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+
+                ),
+                modifier = Modifier
+                //backgroundColor = Color.Transparent,
+                //elevation = 2.dp
+
+            )
+            Divider(
+                color = MaterialTheme.colorScheme.primary,
+                thickness = 2.dp,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 60.dp)
             )
         }
     )

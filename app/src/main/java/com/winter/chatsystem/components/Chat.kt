@@ -33,29 +33,19 @@ fun ChatScreen(
     val displayName = user?.displayName
 
     Scaffold(
-        topBar = {
-            Text(
-                text = "Home",
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-                fontSize = 36.sp,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primary)
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-            )
-        },
-        content = { paddingValues ->
-
+        content = {
             LazyColumn(
-                contentPadding = paddingValues,
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp,
+                        top = 90.dp,
+                        bottom = 56.dp
+                    ),
                 content = {
                     item {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .padding(12.dp)
+                                //.padding(start = 12.dp, end = 12.dp, top = paddingValues.calculateBottomPadding(), bottom = paddingValues.calculateBottomPadding())
                                 .fillMaxWidth()
                                 .clickable(
                                     onClick = {
@@ -65,7 +55,7 @@ fun ChatScreen(
                         ) {
                             Icon(
                                 Icons.Filled.Person,
-                                contentDescription = "person1",
+                                contentDescription = "user",
                                 modifier = Modifier
                                     .padding(end = 12.dp)
                                     .size(40.dp)
@@ -73,14 +63,14 @@ fun ChatScreen(
                             Column(
                                 content = {
                                     Text(
-                                        text = "Talal",
+                                        text = user?.displayName.toString(),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 20.sp,
                                         modifier = Modifier
                                     )
                                     Text(
-                                        text = "Online",
-                                        fontWeight = FontWeight.Thin,
+                                        text = user?.email.toString(),
+                                        fontWeight = FontWeight.Light,
                                         fontSize = 14.sp,
                                         modifier = Modifier
                                     )
@@ -91,6 +81,6 @@ fun ChatScreen(
                 }
             )
         },
-        bottomBar = { BottomNavBar(navController) },
+        //bottomBar = { BottomNavBar(navController) },
     )
 }
