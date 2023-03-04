@@ -37,8 +37,8 @@ fun AccountSettingsScreen(
 
     val auth = Firebase.auth
     val currentUser = auth.currentUser
-    var email = currentUser?.email
-    var displayName = currentUser?.displayName
+    val email = currentUser?.email
+    val displayName = currentUser?.displayName
 
 
     Scaffold(
@@ -47,37 +47,18 @@ fun AccountSettingsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = paddingV.calculateTopPadding())
                     .padding(bottom = paddingV.calculateBottomPadding())
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,//Keep text centered
-                    horizontalArrangement = Arrangement.SpaceAround,
+                Divider(
+                    color = MaterialTheme.colorScheme.primary,
+                    thickness = 2.dp,
                     modifier = Modifier
-                        .align(Alignment.TopCenter)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = ("ArrowBack"),
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier
-                            .clickable(
-                                onClick = { navController.navigate("settings") }
-                            )
-                    )
-                    //Spacer(modifier = modifier.weight(1f))
-                    Text(
-                        text = "Profile Settings",
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.headlineMedium,
-                        textAlign = TextAlign.Center,
-                        fontSize = 36.sp,
-                    )
-                }
+                        .padding(horizontal = 0.dp, vertical = 3.dp)
+                )
 
                 LazyColumn(
                     modifier = Modifier
-
                 ) {
                     item {
                         Row(
@@ -150,7 +131,7 @@ fun AccountSettingsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
-                                .padding(top = paddingV.calculateBottomPadding(), bottom = 13.dp)
+                                .padding(top = 13.dp, bottom = 13.dp)
                         ) {
                             FloatingActionButton(
                                 onClick = { /*TODO*/ },
@@ -170,13 +151,13 @@ fun AccountSettingsScreen(
                         }
                         Row(
                             modifier = Modifier
-                                .padding(bottom = paddingV.calculateBottomPadding())
+                                .padding(bottom = 13.dp)
                         ) {
                             FloatingActionButton(
                                 onClick = {
                                     navController.navigate("login")
                                 },
-                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .size(45.dp)
@@ -185,7 +166,7 @@ fun AccountSettingsScreen(
                                     text = "Logout",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onErrorContainer,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
                                     modifier = Modifier
                                 )
                             }
@@ -194,6 +175,6 @@ fun AccountSettingsScreen(
                 }
             }
         },
-        bottomBar = { BottomNavBar(navController) },
+        //bottomBar = { BottomNavBar(navController) },
     )
 }

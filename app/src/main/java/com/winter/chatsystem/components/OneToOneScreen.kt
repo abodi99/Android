@@ -1,6 +1,7 @@
 package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
+import android.view.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import java.util.*
 
 
@@ -32,21 +34,22 @@ fun OneToOne(
     navController: NavHostController,
     id: Int
 ) {
+    var textFieldValue by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             Row(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
                     .height(60.dp)
-                    .padding( bottom = 10.dp),
+                    .padding(start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
                     Icons.Rounded.ArrowBack,
                     contentDescription = "back",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .clickable(
                             onClick = {
@@ -57,31 +60,37 @@ fun OneToOne(
                 Icon(
                     Icons.Rounded.AccountCircle,
                     contentDescription = "back",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .size(45.dp)
                         .padding(6.dp)
                         .clip(CircleShape)
                         .border(
                             width = 4.dp,
-                            MaterialTheme.colorScheme.onPrimary,
+                            MaterialTheme.colorScheme.onSurface,
                             shape = CircleShape
                         )
                 )
                 Text(text = "Talal",
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 27.sp,
                     modifier = Modifier
                 )
             }
+            Divider(
+                color = MaterialTheme.colorScheme.primary,
+                thickness = 2.dp,
+                modifier = Modifier
+                    .padding(vertical = 59.dp)
+            )
         },
-        content = { padding ->
+        content = {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(padding),
+                    .padding(top = 60.dp, bottom = 156.dp),
             ){
                 items(20){ item ->
                     if (item % 2 == 0) {
@@ -143,6 +152,8 @@ fun OneToOne(
         bottomBar = {
             Column(
                 modifier = Modifier
+                    .padding(bottom = 80.dp)
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
                 Row(
                     modifier = Modifier
@@ -151,15 +162,6 @@ fun OneToOne(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Icon(
-                        Icons.Default.AccountCircle, contentDescription = "Mic",
-                        modifier = Modifier
-                            .padding(start = 6.dp, end = 6.dp)
-                            .size(35.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    var textFieldValue by remember { mutableStateOf("") }
-
                     OutlinedTextField(
                         value = textFieldValue,
                         onValueChange = {textFieldValue = it},
@@ -168,7 +170,7 @@ fun OneToOne(
                             //color = MaterialTheme.colorScheme.onTertiary
                         )},
                         modifier = Modifier
-                            .width(280.dp)
+                            .width(420.dp)
                             .padding(bottom = 4.5.dp),
                         singleLine = true,
                         shape = RoundedCornerShape(30.dp),
@@ -200,7 +202,7 @@ fun OneToOne(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-                BottomNavBar(navController)
+                //BottomNavBar(navController)
             }
         }
     )
