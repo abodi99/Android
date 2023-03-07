@@ -31,6 +31,7 @@ fun LoginScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -119,7 +120,7 @@ fun LoginScreen(
                     auth.signInWithEmailAndPassword(email.text, password.text)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                navController.navigate("chat")
+                                navController.navigate("home")
                             } else {
                                 println("Failed to navigate to chat")
                             }

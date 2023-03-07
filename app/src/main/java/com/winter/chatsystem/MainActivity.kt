@@ -34,6 +34,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.classes.NavigationItem
 import com.winter.chatsystem.components.*
 import com.winter.chatsystem.data.ChatScreen
@@ -45,12 +47,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         FirebaseApp.initializeApp(this)
+
         setContent {
             ChatSystemTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surface
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     AppScreen()
                 }
@@ -65,57 +68,14 @@ var settingsText = listOf(
     SettingsText("Change Password"),
 )
 
-/*
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppScreen(
-    modifier: Modifier = Modifier
-) {
-    val navController = rememberNavController()
-    val coroutineScope = rememberCoroutineScope()
-
-    Scaffold(
-        content = {
-            NavHost(
-                navController = navController,
-                startDestination = "profile"
-            ) {
-                composable("settings") {
-                    SettingsScreen(navController)
-                }
-                composable("login") {
-                    LoginScreen(navController)
-                }
-                composable("signup") {
-                    SignUpScreen(navController)
-                }
-                composable("profile") {
-                    AccountSettingsScreen(navController)
-                }
-                composable("chat") {
-                    ChatScreen(navController)
-                }
-                composable("chat/1") {
-                    //val id = it.arguments!!.getString("id")!!.toInt()
-                    val id = 1
-                    OneToOne(navController, id)
-                }
-            }
-        },
-        //bottomBar = { BottomNavBar(navController) }
-    )
-}
-*/
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppScreen() {
 
-    // State of bottomBar, set state to false, if current page route is "car_details"
+    // State of bottomBar, set state to false, if current page route is ""
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
 
-    // State of topBar, set state to false, if current page route is "car_details"
+    // State of topBar, set state to false, if current page route is ""
     val topBarState = rememberSaveable { (mutableStateOf(true)) }
 
     ChatSystemTheme {
@@ -262,7 +222,6 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
             NavigationBar(
-                tonalElevation = 10.dp
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -321,16 +280,12 @@ fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
                         text = title,
                         fontSize = 27.sp,
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.primary
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-
-                ),
-                modifier = Modifier
-                //backgroundColor = Color.Transparent,
-                //elevation = 2.dp
-
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceTint
+                )
             )
             Divider(
                 color = MaterialTheme.colorScheme.primary,
