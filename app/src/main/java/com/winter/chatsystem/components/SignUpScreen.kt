@@ -253,7 +253,7 @@ fun SignUpScreen(
                         }
                         null -> {
                             // No error occurred, continue with login logic
-
+                            signup(userName.text, email.text, passwordCreation.text)
                         }
                     }
                },
