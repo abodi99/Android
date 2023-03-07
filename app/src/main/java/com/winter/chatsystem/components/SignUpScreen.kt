@@ -1,5 +1,7 @@
 package com.winter.chatsystem.components
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,8 +22,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
+import com.winter.chatsystem.EmailPasswordActivity
+import com.winter.chatsystem.MainActivity
+import com.winter.chatsystem.classes.LoginError
+import com.winter.chatsystem.classes.isValidEmail
+import com.winter.chatsystem.classes.isValidPassword
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,19 +45,46 @@ fun SignUpScreen(
     var passwordConfirmation by remember { mutableStateOf (TextFieldValue("")) }
     var passwordVisibility by remember { mutableStateOf(false) }
 
-    val auth = Firebase.auth
+    val auth = FirebaseAuth.getInstance()
 
-    var emailError = false
-/*
-    Box(contentAlignment = Alignment.TopStart,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back", tint = Color.Black)
+    var usernameError by remember { mutableStateOf("")}
+    var emailError by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf("") }
+    var loginError by remember { mutableStateOf<LoginError?>(null) }
+
+    fun signup(userName: String ,email: String, password: String) {
+        if (email.isEmpty()) {
+            loginError = LoginError.EmptyEmail
+        } else if (!isValidEmail(email)) {
+            loginError = LoginError.InvalidEmail
+        } else if (password.isEmpty()) {
+            loginError = LoginError.EmptyPassword
+        } else if (!isValidPassword(password)) {
+            loginError = LoginError.WeakPassword
+        } else if (passwordCreation != passwordConfirmation) {
+          loginError = LoginError.nonMatchPassword
+        } else {
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        // User account creation is successful
+                        println("User account creation is successful")
+
+                        //auth.currentUser?.sendEmailVerification()
+                        val user = auth.currentUser
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(userName)
+                            .build()
+
+                        user?.updateProfile(profileUpdates)
+                    } else {
+                        // User account creation failed
+                        println("User account creation failed")
+                    }
+                }
+        }
     }
-    
- */
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -74,15 +111,19 @@ fun SignUpScreen(
             ) {
                 OutlinedTextField(
                     value = userName,
-                    onValueChange = { userName = it },
+                    onValueChange = {newUserName ->
+                        userName = newUserName
+                        usernameError = ""
+                    },
                     label = { Text("Username", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                     modifier = Modifier.fillMaxWidth(.8f),
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                     ),
+                    isError = usernameError.isNotEmpty()
                 )
             }
 
@@ -97,9 +138,12 @@ fun SignUpScreen(
                     modifier = Modifier.fillMaxWidth(.8f),
                     maxLines = 2,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
                     ),
                 )
             }
@@ -120,7 +164,7 @@ fun SignUpScreen(
                     modifier = Modifier.fillMaxWidth(.8f),
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                     ),
@@ -135,7 +179,8 @@ fun SignUpScreen(
                                 contentDescription = if (passwordVisibility) "Hide password" else "Show password"
                             )
                         }
-                    }
+                    },
+                    isError = (passwordCreation != passwordConfirmation)
                 )
             }
 
@@ -155,7 +200,7 @@ fun SignUpScreen(
                     modifier = Modifier.fillMaxWidth(.8f),
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                     ),
@@ -170,7 +215,8 @@ fun SignUpScreen(
                                 contentDescription = if (passwordVisibility) "Hide password" else "Show password"
                             )
                         }
-                    }
+                    },
+                    isError = (passwordCreation != passwordConfirmation)
                 )
             }
             Spacer(modifier = Modifier.fillMaxSize(0.10f))
@@ -180,7 +226,37 @@ fun SignUpScreen(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                FloatingActionButton(onClick = { /*TODO*/ },
+                FloatingActionButton(onClick = {
+                    when (loginError) {
+                        LoginError.EmptyEmail -> {
+                            // Display "Please enter an email address" error message
+                            println("Please enter an email address")
+                        }
+                        LoginError.InvalidEmail -> {
+                            // Display "Please enter a valid email address" error message
+                            println("Please enter a valid email address")
+                        }
+                        LoginError.EmptyPassword -> {
+                            // Display "Please enter a password" error message
+                            println("Please enter a password")
+                        }
+                        LoginError.WeakPassword -> {
+                            // Display "Please enter a stronger password" error message
+                            println("Please enter a stronger password")
+                        }
+                        LoginError.nonMatchPassword -> {
+                            println("Password doesn't match'")
+                        }
+                        LoginError.Unknown -> {
+                            // Display "An unknown error occurred" error message
+                            println("An unknown error occurred")
+                        }
+                        null -> {
+                            // No error occurred, continue with login logic
+
+                        }
+                    }
+               },
                     containerColor = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.fillMaxWidth(0.8f)) {
                     Text(
@@ -212,3 +288,5 @@ fun SignUpScreen(
         }
     }
 }
+
+
