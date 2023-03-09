@@ -248,30 +248,52 @@ fun SignUpScreen(
                             LoginError.EmptyEmail -> {
                                 // Display "Please enter an email address" error message
                                 println("Please enter an email address")
+                                Toast.makeText(context, "Please enter an email", Toast.LENGTH_SHORT)
+                                    .show()
+                                loginError = null
                             }
                             LoginError.InvalidEmail -> {
                                 // Display "Please enter a valid email address" error message
-                                println("Please enter a valid email address")
+                                //println("Please enter a valid email address")
+                                Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT)
+                                    .show()
+                                loginError = null
                             }
                             LoginError.EmptyPassword -> {
                                 // Display "Please enter a password" error message
-                                println("Please enter a password")
+                                //println("Please enter a password")
+                                Toast.makeText(context, "Please enter a password", Toast.LENGTH_SHORT)
+                                    .show()
+                                loginError = null
                             }
                             LoginError.WeakPassword -> {
                                 // Display "Please enter a stronger password" error message
                                 println("Please enter a stronger password")
-
+                                Toast.makeText(context, "Please enter a stronger password", Toast.LENGTH_SHORT)
+                                    .show()
+                                loginError = null
                             }
                             LoginError.nonMatchPassword -> {
-                                println("Password doesn't match'")
+                                //println("Password doesn't match'")
+                                Toast.makeText(context, "NonMatchPassword", Toast.LENGTH_SHORT)
+                                    .show()
+                                loginError = null
                             }
                             LoginError.EmailAlreadyExists -> {
                                 println("Email already in use")
-
+                                Toast.makeText(
+                                    context,
+                                    "This email address is already registered",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginError = null
                             }
                             LoginError.Unknown -> {
                                 // Display "An unknown error occurred" error message
                                 println("An unknown error occurred")
+                                Toast.makeText(context, "An unknown error occurred", Toast.LENGTH_SHORT
+                                ).show()
+                                loginError = null
                             }
                             null -> {
                                 // No error occurred, continue with login logic
@@ -282,24 +304,6 @@ fun SignUpScreen(
                     containerColor = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.fillMaxWidth(0.8f)
                 ) {
-                    if (loginError == LoginError.EmailAlreadyExists) {
-                        Toast.makeText(
-                            context,
-                            "This email address is already registered",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if (loginError == LoginError.EmptyPassword) {
-                        Toast.makeText(context, "please enter a password", Toast.LENGTH_SHORT)
-                            .show()
-                    } else if (loginError == LoginError.InvalidEmail) {
-                        Toast.makeText(context, "please enter a valid email", Toast.LENGTH_SHORT)
-                            .show()
-                    } else if (loginError == LoginError.EmptyEmail) {
-                        Toast.makeText(context, "please enter an email", Toast.LENGTH_SHORT).show()
-                    } else if (loginError == LoginError.nonMatchPassword) {
-                        Toast.makeText(context, "nonMatchPassword", Toast.LENGTH_SHORT).show()
-                    }
-
                     Text(
                         text = "Sign Up",
                         fontSize = 20.sp,
