@@ -99,6 +99,6 @@ class EmailPasswordActivity: Activity() {
     }
 
     companion object {
-        private const val TAG = "EmailPassword"
+        const val TAG = "EmailPassword"
     }
 }

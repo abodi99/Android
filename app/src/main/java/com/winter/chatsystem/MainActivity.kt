@@ -34,6 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.classes.NavigationItem
@@ -71,6 +72,9 @@ var settingsText = listOf(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppScreen() {
+
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
 
     // State of bottomBar, set state to false, if current page route is ""
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
@@ -247,7 +251,6 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
                         },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = MaterialTheme.colorScheme.primaryContainer
-
                         )
                     )
                 }
@@ -283,7 +286,7 @@ fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
                     )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.surfaceTint,
                     scrolledContainerColor = MaterialTheme.colorScheme.surfaceTint
                 )
             )
