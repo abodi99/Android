@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -80,6 +81,21 @@ fun SignUpScreen(
                     } else {
                         // User account creation failed
                         println("User account creation failed")
+                    }
+                }
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(EmailPasswordActivity.TAG, "createUserWithEmail:success")
+                        val user = auth.currentUser
+                        updateUI(user)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(EmailPasswordActivity.TAG, "createUserWithEmail:failure", task.exception)
+                        Toast.makeText(baseContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show()
+                        updateUI(null)
                     }
                 }
         }
@@ -287,6 +303,10 @@ fun SignUpScreen(
 
         }
     }
+}
+
+private fun updateUI(user: FirebaseUser?) {
+
 }
 
 
