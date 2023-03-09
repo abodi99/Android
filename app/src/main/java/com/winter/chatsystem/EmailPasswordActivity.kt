@@ -7,12 +7,12 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import com.google.firebase.auth.FirebaseAuth as Fi
 
-class EmailPasswordActivity: Activity() {
+class EmailPasswordActivity(auth: com.google.firebase.auth.FirebaseAuth) : Activity() {
 
     private lateinit var auth: Fi
+
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +47,11 @@ class EmailPasswordActivity: Activity() {
                     Toast.makeText(baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
                     updateUI(null)
+
+                        }
                 }
-            }
-        // [END create_user_with_email]
-    }
+        }
+
 
     private fun signIn(email: String, password: String) {
         // [START sign_in_with_email]

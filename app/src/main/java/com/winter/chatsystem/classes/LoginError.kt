@@ -7,4 +7,6 @@ sealed class LoginError {
     object WeakPassword : LoginError()
     object nonMatchPassword: LoginError()
     object Unknown : LoginError()
+
+    object EmailAlreadyExists : LoginError()
 }
