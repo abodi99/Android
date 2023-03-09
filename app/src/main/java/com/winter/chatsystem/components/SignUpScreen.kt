@@ -72,6 +72,7 @@ fun SignUpScreen(
                                     if (task.isSuccessful) {
                                         // User account creation is successful
                                         println("User account creation is successful")
+                                        navController.navigate("home")
 
                                         //auth.currentUser?.sendEmailVerification()
                                         val user = auth.currentUser
