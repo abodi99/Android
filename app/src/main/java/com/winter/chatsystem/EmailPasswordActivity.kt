@@ -100,6 +100,6 @@ class EmailPasswordActivity(auth: com.google.firebase.auth.FirebaseAuth) : Activ
     }
 
     companion object {
-        private const val TAG = "EmailPassword"
+        const val TAG = "EmailPassword"
     }
 }
