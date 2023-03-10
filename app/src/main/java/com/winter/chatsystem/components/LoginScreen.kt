@@ -1,5 +1,6 @@
 package com.winter.chatsystem.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,6 +16,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -31,6 +33,9 @@ fun LoginScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+
+
+    val context = LocalContext.current
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
@@ -117,14 +122,23 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 FloatingActionButton(onClick = {
-                    auth.signInWithEmailAndPassword(email.text, password.text)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                navController.navigate("home")
-                            } else {
-                                println("Failed to navigate to chat")
+                    val emailText = email.text.toString()
+                    val passwordText = password.text.toString()
+                    if (emailText.isNotEmpty() && passwordText.isNotEmpty()) {
+
+                        auth.signInWithEmailAndPassword(email.text, password.text)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    navController.navigate("home")
+                                } else {
+                                    println("Failed to navigate to chat")
+                                }
                             }
-                        }
+                    }
+                    else {
+                        Toast.makeText(context, "make sure to enter an email and a password", Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 },
                     containerColor = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.fillMaxWidth(0.8f)) {

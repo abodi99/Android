@@ -42,10 +42,15 @@ import com.winter.chatsystem.components.*
 import com.winter.chatsystem.data.ChatScreen
 import com.winter.chatsystem.ui.theme.BottomBarAnimationTheme
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
+import com.winter.chatsystem.EmailPasswordActivity
 
 class MainActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
 
         FirebaseApp.initializeApp(this)
 
@@ -73,7 +78,7 @@ var settingsText = listOf(
 @Composable
 fun AppScreen() {
 
-    val currentUser = FirebaseAuth.getInstance().currentUser
+    val auth = FirebaseAuth.getInstance()
 
 
     // State of bottomBar, set state to false, if current page route is ""
@@ -142,8 +147,11 @@ fun AppScreen() {
             },
             content = {
                 NavHost(
+
                     navController = navController,
-                    startDestination = "signup",
+                    startDestination = if (auth.currentUser!=null) "home" else "signup",
+
+               //     startDestination = "signup",
                 ) {
                     composable(NavigationItem.Home.route) {
                         // show BottomBar and TopBar
