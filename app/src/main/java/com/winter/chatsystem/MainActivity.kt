@@ -34,6 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.classes.NavigationItem
@@ -41,10 +42,15 @@ import com.winter.chatsystem.components.*
 import com.winter.chatsystem.data.ChatScreen
 import com.winter.chatsystem.ui.theme.BottomBarAnimationTheme
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
+import com.winter.chatsystem.EmailPasswordActivity
 
 class MainActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
 
         FirebaseApp.initializeApp(this)
 
@@ -71,6 +77,11 @@ var settingsText = listOf(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppScreen() {
+
+    val auth = FirebaseAuth.getInstance()
+
+    val emailPasswordActivity = EmailPasswordActivity(auth)
+
 
     // State of bottomBar, set state to false, if current page route is ""
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
@@ -138,8 +149,11 @@ fun AppScreen() {
             },
             content = {
                 NavHost(
+
                     navController = navController,
-                    startDestination = "signup",
+                    startDestination = if (auth.currentUser!=null) "home" else "signup",
+
+               //     startDestination = "signup",
                 ) {
                     composable(NavigationItem.Home.route) {
                         // show BottomBar and TopBar

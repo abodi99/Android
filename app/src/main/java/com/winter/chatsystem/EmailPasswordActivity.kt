@@ -51,7 +51,7 @@ class EmailPasswordActivity(auth: com.google.firebase.auth.FirebaseAuth) : Activ
                         }
                 }
         }
-
+    
 
     private fun signIn(email: String, password: String) {
         // [START sign_in_with_email]

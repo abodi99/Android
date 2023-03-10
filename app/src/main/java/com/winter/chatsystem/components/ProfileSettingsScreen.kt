@@ -156,6 +156,7 @@ fun AccountSettingsScreen(
                             FloatingActionButton(
                                 onClick = {
                                     navController.navigate("login")
+
                                 },
                                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                                 modifier = Modifier

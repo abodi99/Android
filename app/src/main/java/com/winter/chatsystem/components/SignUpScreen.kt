@@ -33,6 +33,7 @@ fun SignUpScreen(
     navController: NavHostController
 ) {
     val context = LocalContext.current
+
     var userName by remember { mutableStateOf(TextFieldValue("")) }
     var emailAddress by remember { mutableStateOf(TextFieldValue("")) }
     var passwordCreation by remember { mutableStateOf(TextFieldValue("")) }
