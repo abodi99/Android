@@ -79,9 +79,7 @@ var settingsText = listOf(
 fun AppScreen() {
 
     val auth = FirebaseAuth.getInstance()
-
-    val emailPasswordActivity = EmailPasswordActivity(auth)
-
+    
 
     // State of bottomBar, set state to false, if current page route is ""
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
