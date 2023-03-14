@@ -1,6 +1,5 @@
 package com.winter.chatsystem
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,21 +7,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.TopAppBar
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,17 +22,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.classes.NavigationItem
 import com.winter.chatsystem.components.*
-import com.winter.chatsystem.data.ChatScreen
-import com.winter.chatsystem.ui.theme.BottomBarAnimationTheme
+import com.winter.chatsystem.components.ChatScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
-import com.winter.chatsystem.EmailPasswordActivity
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
@@ -59,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     AppScreen()
                 }
@@ -80,6 +65,7 @@ fun AppScreen() {
 
     val auth = FirebaseAuth.getInstance()
 
+    var currentUser = auth.currentUser
 
     // State of bottomBar, set state to false, if current page route is ""
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
@@ -94,36 +80,43 @@ fun AppScreen() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 
         // Control TopBar and BottomBar
-        when (navBackStackEntry?.destination?.route) {
-            "home" -> {
-                // Show BottomBar and TopBar
-                bottomBarState.value = true
-                topBarState.value = true
-            }
-            "settings" -> {
-                // Show BottomBar and TopBar
-                bottomBarState.value = true
-                topBarState.value = true
-            }
-            "profile" -> {
-                // Show BottomBar and TopBar
-                bottomBarState.value = true
-                topBarState.value = true
-            }
-            "chat/1" -> {
-                // Show BottomBar and TopBar
-                bottomBarState.value = true
-                topBarState.value = true
-            }
-            "signup" -> {
-                // Hide BottomBar and TopBar
-                bottomBarState.value = false
-                topBarState.value = false
-            }
-            "login" -> {
-                // Hide BottomBar and TopBar
-                bottomBarState.value = false
-                topBarState.value = false
+        if (currentUser != null) {
+            when (navBackStackEntry?.destination?.route) {
+                "home" -> {
+                    // Show BottomBar and TopBar
+                    bottomBarState.value = true
+                    topBarState.value = true
+                }
+                "settings" -> {
+                    // Show BottomBar and TopBar
+                    bottomBarState.value = true
+                    topBarState.value = true
+                }
+                "profile" -> {
+                    // Show BottomBar and TopBar
+                    bottomBarState.value = true
+                    topBarState.value = true
+                }
+                "chat/${currentUser.uid}" -> {
+                    // Show BottomBar and TopBar
+                    bottomBarState.value = true
+                    topBarState.value = true
+                }
+                "chat/1" -> {
+                    // Show BottomBar and TopBar
+                    bottomBarState.value = true
+                    topBarState.value = true
+                }
+                "signup" -> {
+                    // Hide BottomBar and TopBar
+                    bottomBarState.value = false
+                    topBarState.value = false
+                }
+                "login" -> {
+                    // Hide BottomBar and TopBar
+                    bottomBarState.value = false
+                    topBarState.value = false
+                }
             }
         }
 
@@ -193,6 +186,18 @@ fun AppScreen() {
                             navController = navController, 1
                         )
                     }
+                    if (currentUser != null) {
+                        composable("chat/{${currentUser.uid}}") {
+                            // show BottomBar and TopBar
+                            LaunchedEffect(Unit) {
+                                bottomBarState.value = true
+                                topBarState.value = false
+                            }
+                            OneToOne(
+                                navController = navController, 1
+                            )
+                        }
+                    }
                     composable("login") {
                         // show BottomBar and TopBar
                         LaunchedEffect(Unit) {
@@ -234,6 +239,7 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
             NavigationBar(
+                tonalElevation = 7.dp
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -291,6 +297,7 @@ fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
                         text = title,
                         fontSize = 27.sp,
                         textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

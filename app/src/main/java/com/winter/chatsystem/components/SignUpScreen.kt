@@ -1,5 +1,6 @@
 package com.winter.chatsystem.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -73,11 +74,13 @@ fun SignUpScreen(
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         // User account creation is successful
+                                        Log.d(EmailPasswordActivity.TAG, "createUserWithEmail:success")
+                                        val user = auth.currentUser
+                                        updateUI(user)
                                         println("User account creation is successful")
                                         navController.navigate("home")
 
                                         //auth.currentUser?.sendEmailVerification()
-                                        val user = auth.currentUser
                                         val profileUpdates = UserProfileChangeRequest.Builder()
                                             .setDisplayName(userName)
                                             .build()
@@ -86,6 +89,11 @@ fun SignUpScreen(
                                     } else {
                                         // User account creation failed
                                         println("User account creation failed")
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(EmailPasswordActivity.TAG, "createUserWithEmail:failure", task.exception)
+                                        Toast.makeText(context, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show()
+                                        updateUI(null)
                                     }
                                 }
                         }
@@ -94,6 +102,7 @@ fun SignUpScreen(
                         println("Failed to fetch sign-in methods for email")
                     }
                 }
+/*
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
@@ -104,11 +113,12 @@ fun SignUpScreen(
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(EmailPasswordActivity.TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.makeText(context, "Authentication failed.",
                             Toast.LENGTH_SHORT).show()
                         updateUI(null)
                     }
                 }
+*/
         }
 
     }

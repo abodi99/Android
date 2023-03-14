@@ -1,7 +1,6 @@
-package com.winter.chatsystem.data
+package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,13 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.winter.chatsystem.components.BottomNavBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,12 +63,14 @@ fun ChatScreen(
                                         text = user?.displayName.toString(),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 20.sp,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         modifier = Modifier
                                     )
                                     Text(
                                         text = user?.email.toString(),
                                         fontWeight = FontWeight.Light,
                                         fontSize = 14.sp,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         modifier = Modifier
                                     )
                                 }
