@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "898331155068",
+    "firebase_url": "https://android-chat101-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "android-chat101",
     "storage_bucket": "android-chat101.appspot.com"
   },
@@ -22,7 +23,7 @@
           }
         },
         {
-          "client_id": "898331155068-ndk0uno6l9gk5e5j7qtgud8aeul0vlvq.apps.googleusercontent.com",
+          "client_id": "898331155068-rt1n1aliqs3euamlip3d005sbiktutak.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
