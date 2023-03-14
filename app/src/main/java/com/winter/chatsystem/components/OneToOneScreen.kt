@@ -1,7 +1,6 @@
 package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
-import android.view.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,7 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.firebase.auth.FirebaseAuth
+import com.winter.chatsystem.classes.ChatViewModel
 import java.util.*
 
 
@@ -34,7 +34,10 @@ fun OneToOne(
     navController: NavHostController,
     id: Int
 ) {
-    var textFieldValue by remember { mutableStateOf("") }
+    var currentUser = FirebaseAuth.getInstance().currentUser
+
+    val viewModel = ChatViewModel()
+    var message by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -163,8 +166,8 @@ fun OneToOne(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     OutlinedTextField(
-                        value = textFieldValue,
-                        onValueChange = {textFieldValue = it},
+                        value = message,
+                        onValueChange = {message = it},
                         // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
                         placeholder = { Text(text = "Write your message",
                             //color = MaterialTheme.colorScheme.onTertiary
@@ -183,6 +186,16 @@ fun OneToOne(
                             imageVector = Icons.Default.Send,
                             contentDescription = "Send",
                             //tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier
+                                .clickable {
+                                    if (currentUser != null) {
+                                        viewModel.sendMessage(
+                                            "chatId$id",
+                                            message,
+                                            currentUser.uid
+                                        )
+                                    }
+                                }
                         )},
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
