@@ -1,9 +1,9 @@
 package com.winter.chatsystem.classes
 
+import android.content.Context
 import android.os.Message
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,13 +16,18 @@ import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import java.util.*
 import kotlin.collections.HashMap
 
+var messageCounter = 0
 
-class ChatViewModel: ViewModel() {
+
+class ChatViewModel(private val context: Context): ViewModel() {
     private val _messages = MutableLiveData<List<Message>>()
     val messages: LiveData<List<Message>> = _messages
 
     private val firebaseDatabase = Firebase.database.reference
 
+
+    private val sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    var messageCounter = sharedPreferences.getInt("messageCounter", 0)
 
     fun fetchMessages() {
         val messagesRef = firebaseDatabase.child("messages")
@@ -54,13 +59,19 @@ class ChatViewModel: ViewModel() {
         val messageMap = HashMap<String, Any>()
         val currentUser = FirebaseAuth.getInstance().currentUser
 
-        messageMap["messageId"] = reference.key!!
+        val messageId = UUID.randomUUID().toString() // Generate a random UUID
+
+
+        messageMap["messageId"] = "message-${messageCounter++}"
         messageMap["message"] = text
         messageMap["senderId"] = currentUser!!.uid
         messageMap["timestamp"] = ServerValue.TIMESTAMP
         reference.setValue(messageMap).addOnSuccessListener {
             // code to be executed on success
             println("Message sent: success")
+
+            sharedPreferences.edit().putInt("messageCounter", messageCounter).apply()
+
         }.addOnFailureListener {
             println("Message sent: $text")
 

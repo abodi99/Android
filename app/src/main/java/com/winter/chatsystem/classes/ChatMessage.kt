@@ -16,7 +16,11 @@ data class ChatMessage(
     val oneMeassage: String,
     val senderId: String,
     val timestamp: Long
+
+
 )
+
+
 
 fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
     val database = Firebase.database.reference
