@@ -1,10 +1,7 @@
 package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,30 +26,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
-<<<<<<< Updated upstream
-import com.winter.chatsystem.classes.ChatViewModel
-=======
 
 import com.winter.chatsystem.classes.ChatViewModel
 import com.winter.chatsystem.classes.getChatMessages
->>>>>>> Stashed changes
 import java.util.*
 
 
 @Composable
-<<<<<<< Updated upstream
-fun OneToOne(
-    navController: NavHostController,
-    id: Int
-) {
-    var currentUser = FirebaseAuth.getInstance().currentUser
-
-    val viewModel = ChatViewModel()
-    var message by remember { mutableStateOf("") }
-=======
 fun ChatScreen(chatId: String) {
     val messages by getChatMessages(chatId).collectAsState(emptyList())
->>>>>>> Stashed changes
 
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
@@ -273,48 +255,6 @@ fun ChatScreen(chatId: String) {
                         .padding(bottom = 80.dp)
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-<<<<<<< Updated upstream
-                    OutlinedTextField(
-                        value = message,
-                        onValueChange = {message = it},
-                        // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
-                        placeholder = { Text(text = "Write your message",
-                            //color = MaterialTheme.colorScheme.onTertiary
-                        )},
-                        modifier = Modifier
-                            .width(420.dp)
-                            .padding(bottom = 4.5.dp),
-                        singleLine = true,
-                        shape = RoundedCornerShape(30.dp),
-                        leadingIcon = { Icon(
-                            imageVector = Icons.Default.Face,
-                            contentDescription = "Msg",
-                            //tint = MaterialTheme.colorScheme.onPrimary
-                        )},
-                        trailingIcon = { Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = "Send",
-                            //tint = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier
-                                .clickable {
-                                    if (currentUser != null) {
-                                        viewModel.sendMessage(
-                                            "chatId$id",
-                                            message,
-                                            currentUser.uid
-                                        )
-                                    }
-                                }
-                        )},
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            //focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            //focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.primary,
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimaryContainer
-=======
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -379,7 +319,6 @@ fun ChatScreen(chatId: String) {
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimaryContainer
                             )
->>>>>>> Stashed changes
                         )
                         Icon(
                             Icons.Default.AddCircle, contentDescription = "Mic",
