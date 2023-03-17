@@ -53,6 +53,35 @@ class ChatViewModel(private val context: Context): ViewModel() {
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> = _toastMessage
 
+  /*  fun sendMessage(chatId: String, text: String, senderID: String) {
+        val database = FirebaseDatabase.getInstance()
+        val reference = database.getReference("/chats/$chatId/messages").push()
+        val messageMap = HashMap<String, Any>()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        val messageId = UUID.randomUUID().toString() // Generate a random UUID
+
+
+        messageMap["messageId"] = "message-${messageCounter++}"
+        messageMap["message"] = text
+        messageMap["senderId"] = currentUser!!.uid
+        messageMap["timestamp"] = ServerValue.TIMESTAMP
+        reference.setValue(messageMap).addOnSuccessListener {
+            // code to be executed on success
+            println("Message sent: success")
+
+            sharedPreferences.edit().putInt("messageCounter", messageCounter).apply()
+
+        }.addOnFailureListener {
+            println("Message sent: $text")
+
+        }
+
+
+    }
+
+   */
+
     fun sendMessage(chatId: String, text: String, senderID: String) {
         val database = FirebaseDatabase.getInstance()
         val reference = database.getReference("/chats/$chatId/messages").push()
@@ -79,6 +108,10 @@ class ChatViewModel(private val context: Context): ViewModel() {
 
 
     }
+
+
+
+
 
     fun printMessages(chatId: String) {
         val messagesRef = firebaseDatabase.child("chats").child(chatId).child("messages")

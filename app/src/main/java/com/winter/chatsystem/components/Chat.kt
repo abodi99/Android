@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +29,10 @@ fun ChatScreen(
     val email = user?.email
     val displayName = user?.displayName
 
+    var newChatEmail by remember { mutableStateOf("") }
+
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         content = {
             LazyColumn(
@@ -42,7 +46,6 @@ fun ChatScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                //.padding(start = 12.dp, end = 12.dp, top = paddingValues.calculateBottomPadding(), bottom = paddingValues.calculateBottomPadding())
                                 .fillMaxWidth()
                                 .clickable(
                                     onClick = {
@@ -77,9 +80,50 @@ fun ChatScreen(
                             )
                         }
                     }
+                    item {
+                        OutlinedButton(
+                            onClick = { showDialog = true },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 24.dp)
+                        ) {
+                            Text("Start a new conversation")
+                        }
+                    }
                 }
             )
         },
         //bottomBar = { BottomNavBar(navController) },
     )
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Start a new conversation") },
+            text = {
+                OutlinedTextField(
+                    value = newChatEmail,
+                    onValueChange = { newChatEmail = it },
+                    label = { Text("Enter email") }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        // TODO: Create new chat
+                        showDialog = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }

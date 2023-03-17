@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,9 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 
 import com.winter.chatsystem.classes.ChatViewModel
+import com.winter.chatsystem.classes.createNewChat
 import com.winter.chatsystem.classes.getChatMessages
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -128,6 +131,8 @@ fun ChatScreen(chatId: String) {
         val auth = FirebaseAuth.getInstance()
         val context = LocalContext.current
         val chatViewModel = ChatViewModel(context)
+        val lifecycleOwner = LocalLifecycleOwner.current
+        val coroutineScope = rememberCoroutineScope()
 
         Scaffold(
             topBar = {
@@ -291,7 +296,16 @@ fun ChatScreen(chatId: String) {
                                     modifier = Modifier
                                         .clickable(
                                             onClick = {
-                                                val chatId = "chatId1"
+                                               /* coroutineScope.launch {
+                                                    val user1Id = "userId1"
+                                                    val user2Id = "userId2"
+                                                    val chatId = createNewChat(user1Id, user2Id)
+                                                    // do something with the chatId
+
+                                                    }
+
+
+                                                */
                                                 val message = textFieldValue
                                                 val currentUser =
                                                     FirebaseAuth.getInstance().currentUser
@@ -302,7 +316,9 @@ fun ChatScreen(chatId: String) {
                                                         currentUser!!.uid.toString()
                                                     )
                                                     textFieldValue = ""
+
                                                 }
+
                                                 // chatViewModel.printMessages(chatId)
 
 
@@ -333,3 +349,4 @@ fun ChatScreen(chatId: String) {
             }
         )
     }
+
