@@ -8,13 +8,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import java.util.*
 import kotlin.collections.HashMap
+
+
+
 
 var messageCounter = 0
 
@@ -26,6 +29,7 @@ class ChatViewModel(private val context: Context): ViewModel() {
     private val firebaseDatabase = Firebase.database.reference
 
 
+
     private val sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     var messageCounter = sharedPreferences.getInt("messageCounter", 0)
 
@@ -34,7 +38,7 @@ class ChatViewModel(private val context: Context): ViewModel() {
         messagesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val messages = mutableListOf<Message>()
-                snapshot.children.forEach { dataSnapshot ->  
+                snapshot.children.forEach { dataSnapshot ->
                     val message = dataSnapshot.getValue(Message::class.java)
                     message?.let {
                         messages.add(it)
@@ -49,38 +53,66 @@ class ChatViewModel(private val context: Context): ViewModel() {
         })
     }
 
+
+
     // Define a LiveData object to show the toast message
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> = _toastMessage
 
-  /*  fun sendMessage(chatId: String, text: String, senderID: String) {
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.getReference("/chats/$chatId/messages").push()
-        val messageMap = HashMap<String, Any>()
-        val currentUser = FirebaseAuth.getInstance().currentUser
-
-        val messageId = UUID.randomUUID().toString() // Generate a random UUID
 
 
-        messageMap["messageId"] = "message-${messageCounter++}"
-        messageMap["message"] = text
-        messageMap["senderId"] = currentUser!!.uid
-        messageMap["timestamp"] = ServerValue.TIMESTAMP
-        reference.setValue(messageMap).addOnSuccessListener {
-            // code to be executed on success
-            println("Message sent: success")
+    fun checkIfEmailExists(newEmail: String, callback: (Boolean) -> Unit) {
+        val auth = FirebaseAuth.getInstance()
 
-            sharedPreferences.edit().putInt("messageCounter", messageCounter).apply()
+        auth.fetchSignInMethodsForEmail(newEmail)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val emailExists = task.result?.signInMethods
+                    val result = task.result
+                    if (emailExists?.isNotEmpty() == true) {
+                        // Email already exists
+                        callback(true)
+                        println("okay")
+                    } else {
+                        callback(false)
+                        println("Not okay")
 
-        }.addOnFailureListener {
-            println("Message sent: $text")
-
-        }
-
-
+                    }
+                } else {
+                    callback(false)
+                }
+            }
     }
 
-   */
+
+    fun startNewChat(otherUserEmail: String) {
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
+        val currentUserEmail = currentUser?.email ?: return
+        val modifiedEmail = currentUserEmail.split("@")[0]
+        val modifiedOtherEmail = otherUserEmail.split("@")[0]
+
+        //val chatId = "$currentUserEmail-$otherUserEmail"
+        val participants = hashMapOf(
+            modifiedEmail to true,
+            modifiedOtherEmail to true
+        )
+        val chat = Chats(participants, hashMapOf())
+        chat.chatId = "${modifiedEmail}-${modifiedOtherEmail}"
+        val databaseRef = FirebaseDatabase.getInstance().getReference("chats")
+
+        databaseRef.child(chat.chatId).setValue(chat)
+            .addOnSuccessListener {
+                Log.d(TAG, "New chat created with ID: ${chat.chatId}")
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error creating new chat with ID: ${chat.chatId}", e)
+            }
+    }
+
+
+
+
 
     fun sendMessage(chatId: String, text: String, senderID: String) {
         val database = FirebaseDatabase.getInstance()

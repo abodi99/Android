@@ -10,12 +10,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.winter.chatsystem.classes.ChatViewModel
+
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,9 +28,13 @@ fun ChatScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+
+
+    val context = LocalContext.current
+    val chatViewModel = ChatViewModel(context)
     val auth = Firebase.auth
     val user = auth.currentUser
-    val email = user?.email
+    val currentUserEmail = user?.email
     val displayName = user?.displayName
 
     var newChatEmail by remember { mutableStateOf("") }
@@ -49,7 +57,7 @@ fun ChatScreen(
                                 .fillMaxWidth()
                                 .clickable(
                                     onClick = {
-                                        navController.navigate("chat/1")
+                                        navController.navigate("talal3-talal10")
                                     }
                                 )
                         ) {
@@ -112,6 +120,16 @@ fun ChatScreen(
                     onClick = {
                         // TODO: Create new chat
                         showDialog = false
+                        chatViewModel.checkIfEmailExists(newChatEmail) { exists ->
+                            if (exists){
+                                chatViewModel.startNewChat(newChatEmail)
+                            } else {
+
+                            }
+                        }
+                        //newChatEmail=""
+
+
                     }
                 ) {
                     Text("OK")

@@ -176,7 +176,7 @@ fun AppScreen() {
                             navController = navController,
                         )
                     }
-                    composable("chat/1") {
+                   /* composable("chat/1") {
                         // show BottomBar and TopBar
                         LaunchedEffect(Unit) {
                             bottomBarState.value = true
@@ -185,19 +185,22 @@ fun AppScreen() {
                         OneToOne(
                             navController = navController, 1
                         )
-                    }
-                    if (currentUser != null) {
-                        composable("chat/{${currentUser.uid}}") {
-                            // show BottomBar and TopBar
-                            LaunchedEffect(Unit) {
-                                bottomBarState.value = true
-                                topBarState.value = false
-                            }
-                            OneToOne(
-                                navController = navController, 1
-                            )
+                    }*/
+
+                    composable("{chatId}") { backStackEntry ->
+                        val arguments = requireNotNull(backStackEntry.arguments)
+                        val chatId = arguments.getString("chatId", "")
+
+                        // show BottomBar and TopBar
+                        LaunchedEffect(Unit) {
+                            bottomBarState.value = true
+                            topBarState.value = false
                         }
+                        OneToOne(
+                            navController = navController, chatId
+                        )
                     }
+
                     composable("login") {
                         // show BottomBar and TopBar
                         LaunchedEffect(Unit) {

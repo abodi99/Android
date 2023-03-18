@@ -9,7 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth as Fi
 
-class EmailPasswordActivity(auth: com.google.firebase.auth.FirebaseAuth) : Activity() {
+class EmailPasswordActivity(firebaseAuth: com.google.firebase.auth.FirebaseAuth) : Activity() {
 
     private lateinit var auth: Fi
 
@@ -98,6 +98,8 @@ class EmailPasswordActivity(auth: com.google.firebase.auth.FirebaseAuth) : Activ
             }
         }
     }
+
+
 
     companion object {
         const val TAG = "EmailPassword"

@@ -1,10 +1,14 @@
 package com.winter.chatsystem.classes
 
+import android.util.Log
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.winter.chatsystem.EmailPasswordActivity.Companion.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +23,33 @@ data class ChatMessage(
 
 
 )
+
+/*fun fetchChats(
+    currentUserEmail: String,
+    onChatsFetched: (List<Chats>) -> Unit
+) {
+    val databaseRef = FirebaseDatabase.getInstance().getReference("chats")
+    val chatsQuery = databaseRef.orderByChild("participants/$currentUserEmail").equalTo(true)
+    chatsQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val chats = mutableListOf<Chats>()
+            for (chatSnapshot in snapshot.children) {
+                val chat = chatSnapshot.getValue(Chats::class.java)
+                chat?.let {
+                    it.chatId = chatSnapshot.key ?: ""
+                    chats.add(it)
+                }
+            }
+            onChatsFetched(chats)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.e(TAG, "Error fetching chats", error.toException())
+        }
+    })
+}
+*/
+
 
 
 
@@ -53,6 +84,8 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
         }
     }.flowOn(Dispatchers.IO)
 }
+
+
 /*
 val sampleData = listOf(
     ChatMessage("Hi there!", "sender1", System.currentTimeMillis()),

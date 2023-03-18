@@ -27,10 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import com.winter.chatsystem.classes.*
 
-import com.winter.chatsystem.classes.ChatViewModel
-import com.winter.chatsystem.classes.createNewChat
-import com.winter.chatsystem.classes.getChatMessages
+//import com.winter.chatsystem.classes.getChatMessages
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -38,6 +37,14 @@ import java.util.*
 @Composable
 fun ChatScreen(chatId: String) {
     val messages by getChatMessages(chatId).collectAsState(emptyList())
+
+   /* var chats by remember { mutableStateOf(emptyList<Chats>()) }
+    // Call fetchChats to get the list of Chats
+    fetchChats("talal10") { fetchedChats ->
+        // Update the chats state with the fetched chats
+        chats = fetchedChats
+    }*/
+
 
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
@@ -125,7 +132,7 @@ fun ChatScreen(chatId: String) {
     @Composable
     fun OneToOne(
         navController: NavHostController,
-        id: Int
+        chatId: String
     ) {
         var textFieldValue by remember { mutableStateOf("") }
         val auth = FirebaseAuth.getInstance()
@@ -186,7 +193,7 @@ fun ChatScreen(chatId: String) {
             },
             content = {
 
-                ChatScreen("chatId1")
+                ChatScreen(chatId)
 
                 /* LazyColumn(
                 modifier = Modifier
@@ -311,7 +318,7 @@ fun ChatScreen(chatId: String) {
                                                     FirebaseAuth.getInstance().currentUser
                                                 if (!message.isBlank()) {
                                                     chatViewModel.sendMessage(
-                                                        "chatId1",
+                                                        "talal3-talal10",
                                                         message,
                                                         currentUser!!.uid.toString()
                                                     )
