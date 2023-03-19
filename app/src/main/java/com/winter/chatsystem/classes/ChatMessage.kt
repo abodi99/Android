@@ -16,12 +16,10 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
 data class ChatMessage(
-    val messageId: String,
-    val oneMeassage: String,
-    val senderId: String,
-    val timestamp: Long
-
-
+    val messageId: String = "",
+    val oneMessage: String = "",
+    val senderId: String = "",
+    val timestamp: Long = 0
 )
 
 /*fun fetchChats(
@@ -65,7 +63,7 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
                     val messageId = messageSnapshot.key as String
                     val message = messageSnapshot.child("message").value as String
                     val senderId = messageSnapshot.child("senderId").value as String
-                    val timestamp = messageSnapshot.child("timestamp").value as Long
+                    val timestamp = messageSnapshot.child("timestamp").getValue(Long::class.java) ?: 0
                     val chatMessage = ChatMessage(messageId, message, senderId, timestamp)
                     messages.add(chatMessage)
                 }
@@ -81,6 +79,37 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
 
         awaitClose {
             messagesRef.removeEventListener(eventListener)
+        }
+    }.flowOn(Dispatchers.IO)
+}
+
+fun getChats(): Flow<List<Chats>> {
+    val database = Firebase.database.reference
+    val chatsRef = database.child("chats")
+
+    return callbackFlow {
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val chats = mutableListOf<Chats>()
+                for (chatSnapshot in snapshot.children) {
+                    val chat = chatSnapshot.getValue(Chats::class.java)
+                    chat?.let {
+                        it.chatId = chatSnapshot.key ?: ""
+                        chats.add(it)
+                    }
+                }
+                this@callbackFlow.trySend(chats).isSuccess
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        chatsRef.addValueEventListener(eventListener)
+
+        awaitClose {
+            chatsRef.removeEventListener(eventListener)
         }
     }.flowOn(Dispatchers.IO)
 }

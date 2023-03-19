@@ -1,8 +1,8 @@
 package com.winter.chatsystem.classes
 
 data class Chats(
-    val participants: HashMap<String, Boolean> = hashMapOf(),
-    val messages: HashMap<String, ChatMessage> = hashMapOf(),
-    var chatId: String = ""
+    var chatId: String? = null,
+    val messages: Map<String, ChatMessage>? = null,
+    val participants: Map<String, Boolean>? = null
 )
 

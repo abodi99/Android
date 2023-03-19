@@ -92,16 +92,16 @@ class ChatViewModel(private val context: Context): ViewModel() {
         val modifiedEmail = currentUserEmail.split("@")[0]
         val modifiedOtherEmail = otherUserEmail.split("@")[0]
 
-        //val chatId = "$currentUserEmail-$otherUserEmail"
+        val chatId = "${modifiedEmail}-${modifiedOtherEmail}"
         val participants = hashMapOf(
             modifiedEmail to true,
             modifiedOtherEmail to true
         )
-        val chat = Chats(participants, hashMapOf())
-        chat.chatId = "${modifiedEmail}-${modifiedOtherEmail}"
+        val chat = Chats(chatId, hashMapOf(), participants)
+
         val databaseRef = FirebaseDatabase.getInstance().getReference("chats")
 
-        databaseRef.child(chat.chatId).setValue(chat)
+        databaseRef.child(chat.chatId!!).setValue(chat)
             .addOnSuccessListener {
                 Log.d(TAG, "New chat created with ID: ${chat.chatId}")
             }

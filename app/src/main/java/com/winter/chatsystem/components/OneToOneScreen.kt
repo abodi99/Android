@@ -74,7 +74,7 @@ fun ChatScreen(chatId: String) {
                         shadowElevation = 0.dp
                     ) {
                         Text(
-                            text = message.oneMeassage,
+                            text = message.oneMessage,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onTertiaryContainer,
                             fontSize = 18.sp,
@@ -109,7 +109,7 @@ fun ChatScreen(chatId: String) {
                         shadowElevation = 0.dp
                     ) {
                         Text(
-                            text = message.oneMeassage,
+                            text = message.oneMessage,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                             fontSize = 18.sp,
@@ -303,22 +303,12 @@ fun ChatScreen(chatId: String) {
                                     modifier = Modifier
                                         .clickable(
                                             onClick = {
-                                               /* coroutineScope.launch {
-                                                    val user1Id = "userId1"
-                                                    val user2Id = "userId2"
-                                                    val chatId = createNewChat(user1Id, user2Id)
-                                                    // do something with the chatId
-
-                                                    }
-
-
-                                                */
                                                 val message = textFieldValue
                                                 val currentUser =
                                                     FirebaseAuth.getInstance().currentUser
                                                 if (!message.isBlank()) {
                                                     chatViewModel.sendMessage(
-                                                        "talal3-talal10",
+                                                        chatId,
                                                         message,
                                                         currentUser!!.uid.toString()
                                                     )
