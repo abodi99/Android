@@ -89,26 +89,46 @@ class ChatViewModel(private val context: Context): ViewModel() {
         val auth = Firebase.auth
         val currentUser = auth.currentUser
         val currentUserEmail = currentUser?.email ?: return
-        val modifiedEmail = currentUserEmail.split("@")[0]
+        val modifiedCurrentEmail = currentUserEmail.split("@")[0]
         val modifiedOtherEmail = otherUserEmail.split("@")[0]
 
-        val chatId = "${modifiedEmail}-${modifiedOtherEmail}"
-        val participants = hashMapOf(
-            modifiedEmail to true,
-            modifiedOtherEmail to true
-        )
-        val chat = Chats(chatId, hashMapOf(), participants)
+        val chatId = "${modifiedCurrentEmail}-${modifiedOtherEmail}"
+        val chatIdReversed = "${modifiedOtherEmail}-${modifiedCurrentEmail}"
 
         val databaseRef = FirebaseDatabase.getInstance().getReference("chats")
-
-        databaseRef.child(chat.chatId!!).setValue(chat)
-            .addOnSuccessListener {
-                Log.d(TAG, "New chat created with ID: ${chat.chatId}")
+        databaseRef.child(chatId).get().addOnSuccessListener { chatSnapshot ->
+            if (chatSnapshot.exists()) {
+                // Chat already exists
+                Log.d(TAG, "Chat already exists with ID: ${chatSnapshot.key}")
+            } else {
+                // Chat doesn't exist, check reverse order
+                databaseRef.child(chatIdReversed).get().addOnSuccessListener { reverseSnapshot ->
+                    if (reverseSnapshot.exists()) {
+                        // Chat already exists in reverse order
+                        Log.d(TAG, "Chat already exists with ID: ${reverseSnapshot.key}")
+                    } else {
+                        // Chat doesn't exist in either order, create new chat
+                        val participants = hashMapOf(
+                            modifiedCurrentEmail to true,
+                            modifiedOtherEmail to true
+                        )
+                        val chat = Chats(chatId, hashMapOf(), participants)
+                        databaseRef.child(chat.chatId!!).setValue(chat)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "New chat created with ID: ${chat.chatId}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e(TAG, "Error creating new chat with ID: ${chat.chatId}", e)
+                            }
+                    }
+                }
             }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Error creating new chat with ID: ${chat.chatId}", e)
-            }
+        }.addOnFailureListener { e ->
+            Log.e(TAG, "Error checking chat existence with ID: $chatId", e)
+        }
     }
+
+
 
 
 
