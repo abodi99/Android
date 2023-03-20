@@ -112,7 +112,7 @@ class ChatViewModel(private val context: Context): ViewModel() {
                             modifiedCurrentEmail to true,
                             modifiedOtherEmail to true
                         )
-                        val chat = Chats(chatId, hashMapOf(), participants)
+                        val chat = Chats(chatId, 0, hashMapOf(), participants)
                         databaseRef.child(chat.chatId!!).setValue(chat)
                             .addOnSuccessListener {
                                 Log.d(TAG, "New chat created with ID: ${chat.chatId}")

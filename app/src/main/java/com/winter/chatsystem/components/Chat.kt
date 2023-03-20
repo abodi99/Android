@@ -116,6 +116,16 @@ fun ChatScreen(
                                             )*/
                                         }
                                     )
+                                    /*Column(modifier = Modifier.weight(1f)) {
+                                        val lastMessage = chat.messages?.values?.lastOrNull()
+                                        val lastMessageText = lastMessage?.oneMessage ?: "No Messages yet"
+                                        val lastMessageTimestamp = lastMessage?.timestamp ?: 0L
+                                        Text(text = lastMessageText)
+                                        println(lastMessageText)
+                                        Text(text = DateFormat.getTimeInstance().format(Date(lastMessageTimestamp)), modifier = Modifier.align(
+                                            Alignment.End
+                                        ))
+                                    }*/
 
                                 }
                             }

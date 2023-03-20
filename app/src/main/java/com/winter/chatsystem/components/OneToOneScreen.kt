@@ -38,13 +38,6 @@ import java.util.*
 fun ChatScreen(chatId: String) {
     val messages by getChatMessages(chatId).collectAsState(emptyList())
 
-   /* var chats by remember { mutableStateOf(emptyList<Chats>()) }
-    // Call fetchChats to get the list of Chats
-    fetchChats("talal10") { fetchedChats ->
-        // Update the chats state with the fetched chats
-        chats = fetchedChats
-    }*/
-
 
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
@@ -135,11 +128,9 @@ fun ChatScreen(chatId: String) {
         chatId: String
     ) {
         var textFieldValue by remember { mutableStateOf("") }
-        val auth = FirebaseAuth.getInstance()
         val context = LocalContext.current
         val chatViewModel = ChatViewModel(context)
-        val lifecycleOwner = LocalLifecycleOwner.current
-        val coroutineScope = rememberCoroutineScope()
+
 
         Scaffold(
             topBar = {

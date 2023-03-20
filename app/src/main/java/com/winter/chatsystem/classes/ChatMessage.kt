@@ -63,7 +63,7 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
                     val messageId = messageSnapshot.key as String
                     val message = messageSnapshot.child("message").value as String
                     val senderId = messageSnapshot.child("senderId").value as String
-                    val timestamp = messageSnapshot.child("timestamp").getValue(Long::class.java) ?: 0
+                    val timestamp = messageSnapshot.child("timestamp").value as Long
                     val chatMessage = ChatMessage(messageId, message, senderId, timestamp)
                     messages.add(chatMessage)
                 }
@@ -83,7 +83,54 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
     }.flowOn(Dispatchers.IO)
 }
 
+
 fun getChats(): Flow<List<Chats>> {
+    val database = Firebase.database.reference
+    val chatsRef = database.child("chats")
+
+    return callbackFlow {
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val chats = mutableListOf<Chats>()
+                for (chatSnapshot in snapshot.children) {
+                    val chat = chatSnapshot.getValue(Chats::class.java)
+                    chat?.let {
+                        it.chatId = chatSnapshot.key ?: ""
+
+                        // get the latest message in the chat
+                        val latestMessage = it.messages?.values?.maxByOrNull { message ->
+                            message.timestamp ?: 0
+                        }
+
+                        // set the timestamp of the latest message as the chat timestamp
+                        it.timestamp = latestMessage?.timestamp ?: 0
+
+                        chats.add(it)
+                    }
+                }
+
+                // sort the chats based on the timestamp of the latest message in descending order
+                val sortedChats = chats.sortedByDescending { chat ->
+                    chat.timestamp
+                }
+
+                this@callbackFlow.trySend(sortedChats).isSuccess
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        chatsRef.addValueEventListener(eventListener)
+
+        awaitClose {
+            chatsRef.removeEventListener(eventListener)
+        }
+    }.flowOn(Dispatchers.IO)
+}
+
+/*fun getChats(): Flow<List<Chats>> {
     val database = Firebase.database.reference
     val chatsRef = database.child("chats")
 
@@ -112,7 +159,7 @@ fun getChats(): Flow<List<Chats>> {
             chatsRef.removeEventListener(eventListener)
         }
     }.flowOn(Dispatchers.IO)
-}
+}*/
 
 
 /*
