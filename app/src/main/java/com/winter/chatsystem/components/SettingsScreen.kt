@@ -8,8 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,12 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.winter.chatsystem.settingsText
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
+
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.*
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
+import com.winter.chatsystem.darkMode
+
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -32,7 +30,7 @@ fun SettingsScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    var isDark = isSystemInDarkTheme()
+
     Scaffold(
         content = {
             Box(
@@ -101,7 +99,8 @@ fun SettingsScreen(
                                     checked = isChecked.value,
                                     onCheckedChange = {
                                         isChecked.value = it
-                                        isDark = it
+                                        darkMode = !darkMode
+
                                     },
                                     modifier = modifier
                                 )

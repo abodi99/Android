@@ -1,6 +1,7 @@
 package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
+import android.icu.text.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,6 +30,7 @@ import com.winter.chatsystem.classes.getChats
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import java.util.*
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -38,6 +40,7 @@ fun ChatScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+
     val chats by getChats().collectAsState(emptyList())
 
 
@@ -60,16 +63,18 @@ fun ChatScreen(
                     .padding(start = 12.dp, end = 12.dp,
                         top = 75.dp,
                         bottom = 56.dp
+
                     ),
                 content = {
                     items(chats) { chat ->
                         val chatIds = chat.chatId!!.split("-")
 
                         if(chatIds[0]!! == currentUserEmail!!.split("@")[0] || chatIds[1]!! == currentUserEmail!!.split("@")[0] ){
-                            Card(
+                            Column(
                                 modifier = Modifier
-                                    .padding(6.dp).shadow(2.dp),
-                                shape = RoundedCornerShape(12.dp),
+                                    .padding(0.dp)
+                                    .background(color = MaterialTheme.colorScheme.background),
+                               // shape = RoundedCornerShape(6.dp),
 
                                 ) {
                                 Row(
@@ -77,6 +82,7 @@ fun ChatScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(6.dp)
+
                                         // .border(1.dp, Color.Gray)
                                         .clickable(
                                             onClick = {
@@ -88,9 +94,10 @@ fun ChatScreen(
                                         Icons.Filled.Person,
                                         contentDescription = "user",
                                         modifier = Modifier
-                                            .padding(end = 12.dp)
-                                            .size(40.dp)
-                                    )
+                                            .size(25.dp),
+                                        tint = MaterialTheme.colorScheme.onBackground,
+
+                                        )
                                     Column(
                                         modifier = Modifier
                                             .padding(16.dp),
@@ -104,7 +111,7 @@ fun ChatScreen(
                                                 },
                                                 fontWeight = FontWeight.Bold,
                                                 fontSize = 20.sp,
-                                                color = MaterialTheme.colorScheme.onSurface,
+                                                color = MaterialTheme.colorScheme.onBackground,
                                                 modifier = Modifier
                                             )
                                             /*Text(
@@ -116,16 +123,16 @@ fun ChatScreen(
                                             )*/
                                         }
                                     )
-                                    /*Column(modifier = Modifier.weight(1f)) {
+                                    Column(modifier = Modifier.weight(1f)) {
                                         val lastMessage = chat.messages?.values?.lastOrNull()
                                         val lastMessageText = lastMessage?.oneMessage ?: "No Messages yet"
-                                        val lastMessageTimestamp = lastMessage?.timestamp ?: 0L
-                                        Text(text = lastMessageText)
-                                        println(lastMessageText)
+                                        val lastMessageTimestamp = chat.timestamp ?: 0L
+                                        //Text(text = lastMessageText)
                                         Text(text = DateFormat.getTimeInstance().format(Date(lastMessageTimestamp)), modifier = Modifier.align(
                                             Alignment.End
-                                        ))
-                                    }*/
+                                        ),color = MaterialTheme.colorScheme.onBackground, fontSize = 11.sp
+                                        )
+                                    }
 
                                 }
                             }

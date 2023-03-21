@@ -29,6 +29,8 @@ import com.winter.chatsystem.components.*
 import com.winter.chatsystem.components.ChatScreen
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
+var darkMode by mutableStateOf(false)
+
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
@@ -39,8 +41,9 @@ class MainActivity : ComponentActivity() {
 
         FirebaseApp.initializeApp(this)
 
+
         setContent {
-            ChatSystemTheme {
+            ChatSystemTheme(darkMode) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -73,7 +76,7 @@ fun AppScreen() {
     // State of topBar, set state to false, if current page route is ""
     val topBarState = rememberSaveable { (mutableStateOf(true)) }
 
-    ChatSystemTheme {
+    ChatSystemTheme(darkMode) {
         val navController = rememberNavController()
 
         // Subscribe to navBackStackEntry, required to get current route
