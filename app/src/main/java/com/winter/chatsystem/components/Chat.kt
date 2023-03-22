@@ -30,6 +30,7 @@ import com.winter.chatsystem.classes.getChats
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.text.capitalize
 import java.util.*
 
 
@@ -105,9 +106,9 @@ fun ChatScreen(
                                         content = {
                                             Text(
                                                 text = if(chat.chatId!!.substringAfter("-") != currentUserEmail!!.split("@")[0]){
-                                                    chat.chatId!!.substringAfter("-")
+                                                    chat.chatId!!.substringAfter("-").capitalize()
                                                                                                                                 } else {
-                                                    chat.chatId!!.substringBefore("-")
+                                                    chat.chatId!!.substringBefore("-").capitalize()
                                                 },
                                                 fontWeight = FontWeight.Bold,
                                                 fontSize = 20.sp,
@@ -211,8 +212,10 @@ fun ChatScreen(
                 OutlinedTextField(
                     value = newChatEmail,
                     onValueChange = { newChatEmail = it },
-                    label = { Text("Enter email") }
-                )
+                    label = { Text("Enter email") },
+                    singleLine = true,
+
+                    )
             },
             confirmButton = {
                 TextButton(

@@ -163,7 +163,7 @@ fun SignUpScreen(
                     onValueChange = { emailAddress = it },
                     label = { Text("Email", color = MaterialTheme.colorScheme.onSurfaceVariant) },
                     modifier = Modifier.fillMaxWidth(.8f),
-                    maxLines = 2,
+                    singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedBorderColor = MaterialTheme.colorScheme.primary,

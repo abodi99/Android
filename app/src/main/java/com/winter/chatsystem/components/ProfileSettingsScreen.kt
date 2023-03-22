@@ -25,6 +25,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 
+
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +38,7 @@ fun AccountSettingsScreen(
     var newDisplayName by remember { mutableStateOf(TextFieldValue("")) }
 
     val auth = Firebase.auth
-    val currentUser = auth.currentUser
+    var currentUser = auth.currentUser
     val email = currentUser?.email
     val displayName = currentUser?.displayName
 
@@ -157,8 +159,9 @@ fun AccountSettingsScreen(
                                 onClick = {
                                     navController.navigate("login")
 
+
                                 },
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .size(45.dp)
@@ -167,8 +170,8 @@ fun AccountSettingsScreen(
                                     text = "Logout",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    modifier = Modifier
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+
                                 )
                             }
                         }

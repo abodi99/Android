@@ -21,12 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.classes.*
 
 //import com.winter.chatsystem.classes.getChatMessages
@@ -130,6 +133,9 @@ fun ChatScreen(chatId: String) {
         var textFieldValue by remember { mutableStateOf("") }
         val context = LocalContext.current
         val chatViewModel = ChatViewModel(context)
+        val auth = Firebase.auth
+        val user = auth.currentUser
+        val currentUserEmail = user?.email
 
 
         Scaffold(
@@ -168,7 +174,10 @@ fun ChatScreen(chatId: String) {
                             )
                     )
                     Text(
-                        text = "Talal",
+                        text = if(chatId!!.substringAfter("-") != currentUserEmail!!.split("@")[0]){
+                            chatId!!.substringAfter("-").capitalize()
+                        } else {
+                            chatId!!.substringBefore("-").capitalize()},
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 27.sp,
@@ -186,71 +195,6 @@ fun ChatScreen(chatId: String) {
 
                 ChatScreen(chatId)
 
-                /* LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(top = 60.dp, bottom = 156.dp),
-            ){
-                items(20){ item ->
-                    if (item % 2 == 0) {
-                        Box(modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart) {
-                            Surface(
-                                modifier = Modifier
-                                    .padding(6.dp)
-                                    .width(270.dp)
-                                    .wrapContentSize(Alignment.CenterStart),
-                                color = MaterialTheme.colorScheme.tertiaryContainer,
-                                shape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 50.dp, bottomStart = 15.dp, topStart = 15.dp),
-                                shadowElevation = 0.dp
-                            ) {
-                                Text(text = "Hello, whats up?",
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    fontSize = 18.sp,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(7.dp)
-                                        //  .height(35.dp)
-                                        .wrapContentSize(),
-                                    textAlign = TextAlign.Justify
-                                )
-                            }
-                        }
-                    } else {
-                        Box(modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.CenterEnd) {
-                            Surface(
-                                modifier = Modifier
-                                    .padding(6.dp)
-                                    .width(270.dp)
-                                    .wrapContentSize(Alignment.CenterEnd),
-
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp, bottomStart = 50.dp, topStart = 10.dp),
-                                shadowElevation = 0.dp
-                            ) {
-                                Text(text = "Hi, how you doing?",
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    fontSize = 18.sp,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(7.dp)
-                                        //   .height(35.dp)
-                                        .wrapContentSize(),
-                                    textAlign = TextAlign.Start
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            */
-
-                //Spacer(modifier = Modifier.weight(1f))
             },
             bottomBar = {
                 Column(
@@ -336,5 +280,5 @@ fun ChatScreen(chatId: String) {
                 }
             }
         )
-    }
+        }
 
