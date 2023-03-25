@@ -2,6 +2,7 @@ package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
 import android.icu.text.DateFormat
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,7 +31,10 @@ import com.winter.chatsystem.classes.getChats
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.unit.Dp
+import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 
 
@@ -88,6 +92,11 @@ fun ChatScreen(
                                         .clickable(
                                             onClick = {
                                                 navController.navigate(chat.chatId!!)
+                                                val database = FirebaseDatabase.getInstance()
+                                                database
+                                                    .getReference("/chats/${chat.chatId}/read")
+                                                    .setValue(true)
+                                                print(chat.read)
                                             }
                                         )
                                 ){
@@ -115,25 +124,27 @@ fun ChatScreen(
                                                 color = MaterialTheme.colorScheme.onBackground,
                                                 modifier = Modifier
                                             )
-                                            /*Text(
-                                                text = user?.email.toString(),
-                                                fontWeight = FontWeight.Light,
-                                                fontSize = 14.sp,
-                                                color = MaterialTheme.colorScheme.onSurface,
-                                                modifier = Modifier
-                                            )*/
                                         }
                                     )
+
+
+
+
                                     Column(modifier = Modifier.weight(1f)) {
-                                        val lastMessage = chat.messages?.values?.lastOrNull()
-                                        val lastMessageText = lastMessage?.oneMessage ?: "No Messages yet"
+                                      //  val lastMessage = chat.messages!!.values!!.lastOrNull()
                                         val lastMessageTimestamp = chat.timestamp ?: 0L
                                         //Text(text = lastMessageText)
+
                                         Text(text = DateFormat.getTimeInstance().format(Date(lastMessageTimestamp)), modifier = Modifier.align(
                                             Alignment.End
-                                        ),color = MaterialTheme.colorScheme.onBackground, fontSize = 11.sp
+                                        ).padding(6.dp),color =
+                                             MaterialTheme.colorScheme.onBackground, fontSize = 11.sp
                                         )
                                     }
+                                    if(chat.read == false && chat.sendId != user.uid!!){
+                                        UnreadMessageCircle()
+                                    }
+
 
                                 }
                             }
@@ -141,47 +152,6 @@ fun ChatScreen(
 
 
                     }
-
-                    /*item {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(
-                                    onClick = {
-                                        navController.navigate("talal3-talal10")
-                                    }
-                                )
-                        ) {
-                            Icon(
-                                Icons.Filled.Person,
-                                contentDescription = "user",
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .size(40.dp)
-                            )
-                            Column(
-                                content = {
-                                    Text(
-                                        text = user?.displayName.toString(),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 20.sp,
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier
-                                    )
-                                    Text(
-                                        text = user?.email.toString(),
-                                        fontWeight = FontWeight.Light,
-                                        fontSize = 14.sp,
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier
-                                    )
-                                }
-                            )
-                        }
-                    }
-
-                     */
 
                     item {
                         OutlinedButton(
@@ -245,5 +215,25 @@ fun ChatScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+fun UnreadMessageCircle(
+    size: Dp = 14.dp,
+    //    strokeWidth: Dp = 2.dp,
+    color: Color = Color.Green,
+
+    ) {
+    Box(modifier = Modifier.size(size).fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+        Canvas(modifier = Modifier.matchParentSize()) {
+            val radius = size.toPx() / 2
+            drawCircle(
+                color = color,
+                radius = radius,
+                //  center = Offset(radius, radius),
+                //  style = Stroke(width = strokeWidth.toPx())
+            )
+        }
     }
 }

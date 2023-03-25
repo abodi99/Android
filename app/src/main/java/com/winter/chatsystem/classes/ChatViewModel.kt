@@ -151,6 +151,10 @@ class ChatViewModel(private val context: Context): ViewModel() {
             // code to be executed on success
             println("Message sent: success")
             database.getReference("/chats/$chatId/timestamp").setValue(messageMap["timestamp"])
+            database.getReference("/chats/$chatId/read").setValue(false)
+            database.getReference("/chats/$chatId/sendId").setValue(currentUser.uid)
+
+
 
             sharedPreferences.edit().putInt("messageCounter", messageCounter).apply()
 
