@@ -19,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.capitalize
@@ -41,87 +42,90 @@ import java.util.*
 fun ChatScreen(chatId: String) {
     val messages by getChatMessages(chatId).collectAsState(emptyList())
 
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(top = 60.dp, bottom = 156.dp)
+        ) {
 
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .padding(top = 60.dp, bottom = 156.dp)) {
-        items(messages) { message ->
+            items(messages) { message ->
 
-            if (message.senderId != FirebaseAuth.getInstance().currentUser!!.uid.toString()) {
-                println(message.senderId)
-                println(FirebaseAuth.getInstance().currentUser!!.uid)
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .width(270.dp)
-                            .wrapContentSize(Alignment.CenterStart),
-                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                        shape = RoundedCornerShape(
-                            topEnd = 10.dp,
-                            bottomEnd = 50.dp,
-                            bottomStart = 15.dp,
-                            topStart = 15.dp
-                        ),
-                        shadowElevation = 0.dp
+                if (message.senderId != FirebaseAuth.getInstance().currentUser!!.uid.toString()) {
+                    println(message.senderId)
+                    println(FirebaseAuth.getInstance().currentUser!!.uid)
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart
                     ) {
-                        Text(
-                            text = message.oneMessage,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onTertiaryContainer,
-                            fontSize = 18.sp,
+                        Surface(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                                //  .height(35.dp)
-                                .wrapContentSize(),
-                            textAlign = TextAlign.Start
-                        )
+                                .padding(6.dp)
+                                .width(270.dp)
+                                .wrapContentSize(Alignment.CenterStart),
+                            color = MaterialTheme.colorScheme.tertiaryContainer,
+                            shape = RoundedCornerShape(
+                                topEnd = 10.dp,
+                                bottomEnd = 50.dp,
+                                bottomStart = 15.dp,
+                                topStart = 15.dp
+                            ),
+                            shadowElevation = 0.dp
+                        ) {
+                            Text(
+                                text = message.oneMessage,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                fontSize = 18.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(4.dp)
+                                    //  .height(35.dp)
+                                    .wrapContentSize(),
+                                textAlign = TextAlign.Start
+                            )
+                        }
                     }
-                }
 
-            } else {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .width(270.dp)
-                            .wrapContentSize(Alignment.CenterEnd),
-
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(
-                            topEnd = 15.dp,
-                            bottomEnd = 15.dp,
-                            bottomStart = 50.dp,
-                            topStart = 10.dp
-                        ),
-                        shadowElevation = 0.dp
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd
                     ) {
-                        Text(
-                            text = message.oneMessage,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontSize = 18.sp,
+                        Surface(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(7.dp)
-                                //   .height(35.dp)
-                                .wrapContentSize(),
-                            textAlign = TextAlign.Start
-                        )
-                    }
-                }
+                                .padding(6.dp)
+                                .width(270.dp)
+                                .wrapContentSize(Alignment.CenterEnd),
 
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            shape = RoundedCornerShape(
+                                topEnd = 15.dp,
+                                bottomEnd = 15.dp,
+                                bottomStart = 50.dp,
+                                topStart = 10.dp
+                            ),
+                            shadowElevation = 0.dp
+                        ) {
+                            Text(
+                                text = message.oneMessage,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontSize = 18.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(7.dp)
+                                    //   .height(35.dp)
+                                    .wrapContentSize(),
+                                textAlign = TextAlign.Start
+                            )
+                        }
+                    }
+
+                }
             }
         }
-    }
+
 }
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
@@ -137,148 +141,164 @@ fun ChatScreen(chatId: String) {
         val user = auth.currentUser
         val currentUserEmail = user?.email
 
-
-        Scaffold(
-            topBar = {
-                Row(
+        if (chatViewModel.loading.value) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .padding(start = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Rounded.ArrowBack,
-                        contentDescription = "back",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier
-                            .clickable(
-                                onClick = {
-                                    navController.popBackStack()
-                                }
-                            )
-                    )
-                    Icon(
-                        Icons.Rounded.AccountCircle,
-                        contentDescription = "back",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier
-                            .size(45.dp)
-                            .padding(6.dp)
-                            .clip(CircleShape)
-                            .border(
-                                width = 4.dp,
-                                MaterialTheme.colorScheme.onSurface,
-                                shape = CircleShape
-                            )
-                    )
-                    Text(
-                        text = if(chatId!!.substringAfter("-") != currentUserEmail!!.split("@")[0]){
-                            chatId!!.substringAfter("-").capitalize()
-                        } else {
-                            chatId!!.substringBefore("-").capitalize()},
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 27.sp,
-                        modifier = Modifier
-                    )
-                }
-                Divider(
-                    color = MaterialTheme.colorScheme.primary,
-                    thickness = 2.dp,
-                    modifier = Modifier
-                        .padding(vertical = 59.dp)
+                        .size(36.dp)
+                        .align(Alignment.Center)
                 )
-            },
-            content = {
-
-                ChatScreen(chatId)
-
-            },
-            bottomBar = {
-                Column(
-                    modifier = Modifier
-                        .padding(bottom = 80.dp)
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
+            }
+        } else {
+            Scaffold(
+                topBar = {
                     Row(
                         modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surface)
                             .fillMaxWidth()
-                            .height(69.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                            .height(60.dp)
+                            .padding(start = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        OutlinedTextField(
-                            value = textFieldValue,
-                            onValueChange = { textFieldValue = it },
-                            // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
-                            placeholder = {
-                                Text(
-                                    text = "Write your message",
-                                    //color = MaterialTheme.colorScheme.onTertiary
-                                )
-                            },
+                        Icon(
+                            Icons.Rounded.ArrowBack,
+                            contentDescription = "back",
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
-                                .width(420.dp)
-                                .padding(bottom = 4.5.dp),
-                            singleLine = true,
-                            shape = RoundedCornerShape(30.dp),
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Face,
-                                    contentDescription = "Msg",
-                                    //tint = MaterialTheme.colorScheme.onPrimary
+                                .clickable(
+                                    onClick = {
+                                        navController.popBackStack()
+                                    }
                                 )
-                            },
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Send,
-                                    contentDescription = "Send",
-                                    modifier = Modifier
-                                        .clickable(
-                                            onClick = {
-                                                val message = textFieldValue
-                                                val currentUser =
-                                                    FirebaseAuth.getInstance().currentUser
-                                                if (!message.isBlank()) {
-                                                    chatViewModel.sendMessage(
-                                                        chatId,
-                                                        message,
-                                                        currentUser!!.uid.toString()
-                                                    )
-                                                    textFieldValue = ""
-
-                                                }
-
-                                                // chatViewModel.printMessages(chatId)
-
-
-                                            }
-                                            //tint = MaterialTheme.colorScheme.onPrimary,
-                                        ))
-                            },
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                //focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                //focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = MaterialTheme.colorScheme.primary,
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
                         )
                         Icon(
-                            Icons.Default.AddCircle, contentDescription = "Mic",
+                            Icons.Rounded.AccountCircle,
+                            contentDescription = "back",
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
-                                .padding(start = 6.dp, end = 6.dp)
-                                .size(35.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                                .size(45.dp)
+                                .padding(6.dp)
+                                .clip(CircleShape)
+                                .border(
+                                    width = 4.dp,
+                                    MaterialTheme.colorScheme.onSurface,
+                                    shape = CircleShape
+                                )
+                        )
+                        Text(
+                            text = if (chatId!!.substringAfter("-") != currentUserEmail!!.split("@")[0]) {
+                                chatId!!.substringAfter("-").capitalize()
+                            } else {
+                                chatId!!.substringBefore("-").capitalize()
+                            },
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 27.sp,
+                            modifier = Modifier
                         )
                     }
-                    //BottomNavBar(navController)
+                    Divider(
+                        color = MaterialTheme.colorScheme.primary,
+                        thickness = 2.dp,
+                        modifier = Modifier
+                            .padding(vertical = 59.dp)
+                    )
+                },
+                content = {
+
+                    ChatScreen(chatId)
+
+
+                },
+                bottomBar = {
+                    Column(
+                        modifier = Modifier
+                            .padding(bottom = 80.dp)
+                            .background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(69.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            OutlinedTextField(
+                                value = textFieldValue,
+                                onValueChange = { textFieldValue = it },
+                                // label = { Text(text = "Write your message", color = MaterialTheme.colorScheme.onPrimary)},
+                                placeholder = {
+                                    Text(
+                                        text = "Write your message",
+                                        //color = MaterialTheme.colorScheme.onTertiary
+                                    )
+                                },
+                                modifier = Modifier
+                                    .width(420.dp)
+                                    .padding(bottom = 4.5.dp),
+                                singleLine = true,
+                                shape = RoundedCornerShape(30.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Face,
+                                        contentDescription = "Msg",
+                                        //tint = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                },
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Send,
+                                        contentDescription = "Send",
+                                        modifier = Modifier
+                                            .clickable(
+                                                onClick = {
+                                                    val message = textFieldValue
+                                                    val currentUser =
+                                                        FirebaseAuth.getInstance().currentUser
+                                                    if (!message.isBlank()) {
+                                                        chatViewModel.sendMessage(
+                                                            chatId,
+                                                            message,
+                                                            currentUser!!.uid.toString()
+                                                        )
+                                                        textFieldValue = ""
+
+                                                    }
+
+                                                    // chatViewModel.printMessages(chatId)
+
+
+                                                }
+                                                //tint = MaterialTheme.colorScheme.onPrimary,
+                                            ))
+                                },
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    //focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    //focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            )
+                            Icon(
+                                Icons.Default.AddCircle, contentDescription = "Mic",
+                                modifier = Modifier
+                                    .padding(start = 6.dp, end = 6.dp)
+                                    .size(35.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        //BottomNavBar(navController)
+                    }
                 }
-            }
-        )
+            )
         }
+    }
 

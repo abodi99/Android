@@ -8,15 +8,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
+
 import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.platform.LocalContext
@@ -27,13 +25,9 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.classes.ChatViewModel
-import com.winter.chatsystem.classes.getChats
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.Dp
 import com.google.firebase.database.FirebaseDatabase
 import com.winter.chatsystem.R
@@ -49,7 +43,7 @@ fun ChatScreen(
     modifier: Modifier = Modifier
 ) {
 
-    val chats by getChats().collectAsState(emptyList())
+
 
 
     val context = LocalContext.current
@@ -57,7 +51,9 @@ fun ChatScreen(
     val auth = Firebase.auth
     val user = auth.currentUser
     val currentUserEmail = user?.email
-    val displayName = user?.displayName
+
+    val chats by chatViewModel.getChats().collectAsState(emptyList())
+
 
     var newChatEmail by remember { mutableStateOf("") }
 
@@ -65,114 +61,140 @@ fun ChatScreen(
 
     Scaffold(
         content = {
+            if (chatViewModel.loading.value) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                        .wrapContentSize(Alignment.Center)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+            } else {
 
-            LazyColumn(
-                modifier = Modifier
-                    .padding(start = 12.dp, end = 12.dp,
-                        top = 75.dp,
-                        bottom = 56.dp
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp, end = 12.dp,
+                            top = 75.dp,
+                            bottom = 56.dp
 
-                    ),
-                content = {
-                    items(chats) { chat ->
-                        val chatIds = chat.chatId!!.split("-")
+                        ),
+                    content = {
+                        items(chats) { chat ->
+                            val chatIds = chat.chatId!!.split("-")
 
-                        if(chatIds[0]!! == currentUserEmail!!.split("@")[0] || chatIds[1]!! == currentUserEmail!!.split("@")[0] ){
-                            Column(
-                                modifier = Modifier
-                                    .padding(0.dp)
-                                    .background(color = MaterialTheme.colorScheme.background),
-                               // shape = RoundedCornerShape(6.dp),
+                            if (chatIds[0]!! == currentUserEmail!!.split("@")[0] || chatIds[1]!! == currentUserEmail!!.split(
+                                    "@"
+                                )[0]
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(0.dp)
+                                        .background(color = MaterialTheme.colorScheme.background),
+                                    // shape = RoundedCornerShape(6.dp),
 
                                 ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(6.dp)
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(6.dp)
 
-                                        // .border(1.dp, Color.Gray)
-                                        .clickable(
-                                            onClick = {
-                                                navController.navigate(chat.chatId!!)
-                                                val database = FirebaseDatabase.getInstance()
-                                                database
-                                                    .getReference("/chats/${chat.chatId}/read")
-                                                    .setValue(true)
-                                                print(chat.read)
+                                            // .border(1.dp, Color.Gray)
+                                            .clickable(
+                                                onClick = {
+                                                    navController.navigate(chat.chatId!!)
+                                                    val database = FirebaseDatabase.getInstance()
+                                                    database
+                                                        .getReference("/chats/${chat.chatId}/read")
+                                                        .setValue(true)
+                                                    print(chat.read)
+                                                }
+                                            )
+                                    ) {
+                                        Icon(
+                                            Icons.Filled.Person,
+                                            contentDescription = "user",
+                                            modifier = Modifier
+                                                .size(25.dp),
+                                            tint = MaterialTheme.colorScheme.onBackground,
+
+                                            )
+                                        Column(
+                                            modifier = Modifier
+                                                .padding(16.dp),
+
+                                            content = {
+                                                Text(
+                                                    text = if (chat.chatId!!.substringAfter("-") != currentUserEmail!!.split(
+                                                            "@"
+                                                        )[0]
+                                                    ) {
+                                                        chat.chatId!!.substringAfter("-")
+                                                            .capitalize()
+                                                    } else {
+                                                        chat.chatId!!.substringBefore("-")
+                                                            .capitalize()
+                                                    },
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 20.sp,
+                                                    color = MaterialTheme.colorScheme.onBackground,
+                                                    modifier = Modifier
+                                                )
                                             }
                                         )
-                                ){
-                                    Icon(
-                                        Icons.Filled.Person,
-                                        contentDescription = "user",
-                                        modifier = Modifier
-                                            .size(25.dp),
-                                        tint = MaterialTheme.colorScheme.onBackground,
 
-                                        )
-                                    Column(
-                                        modifier = Modifier
-                                            .padding(16.dp),
 
-                                        content = {
+
+
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            val lastMessageTimestamp = chat.timestamp ?: 0L
+
                                             Text(
-                                                text = if(chat.chatId!!.substringAfter("-") != currentUserEmail!!.split("@")[0]){
-                                                    chat.chatId!!.substringAfter("-").capitalize()
-                                                                                                                                } else {
-                                                    chat.chatId!!.substringBefore("-").capitalize()
-                                                },
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 20.sp,
-                                                color = MaterialTheme.colorScheme.onBackground,
-                                                modifier = Modifier
+                                                text = DateFormat.getTimeInstance()
+                                                    .format(Date(lastMessageTimestamp)),
+                                                modifier = Modifier.align(
+                                                    Alignment.End
+                                                ).padding(6.dp),
+                                                color =
+                                                MaterialTheme.colorScheme.onBackground,
+                                                fontSize = 11.sp
                                             )
                                         }
-                                    )
+                                        if (chat.read == false && chat.sendId != user.uid!!) {
+                                            UnreadMessageCircle()
+                                        }
 
 
-
-
-                                    Column(modifier = Modifier.weight(1f)) {
-                                      //  val lastMessage = chat.messages!!.values!!.lastOrNull()
-                                        val lastMessageTimestamp = chat.timestamp ?: 0L
-                                        //Text(text = lastMessageText)
-
-                                        Text(text = DateFormat.getTimeInstance().format(Date(lastMessageTimestamp)), modifier = Modifier.align(
-                                            Alignment.End
-                                        ).padding(6.dp),color =
-                                             MaterialTheme.colorScheme.onBackground, fontSize = 11.sp
-                                        )
                                     }
-                                    if(chat.read == false && chat.sendId != user.uid!!){
-                                        UnreadMessageCircle()
-                                    }
-
-
                                 }
                             }
+
+
                         }
 
-
-                    }
-
-                    item {
-                        OutlinedButton(
-                            onClick = { showDialog = true },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 24.dp)
-                        ) {
-                            Text(stringResource(id = R.string.StartNewChat))
+                        item {
+                            OutlinedButton(
+                                onClick = { showDialog = true },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 24.dp)
+                            ) {
+                                Text(stringResource(id = R.string.StartNewChat))
+                            }
                         }
                     }
-                }
-            )
-        },
+                )
+            }
+        }
 
 
 
-            //bottomBar = { BottomNavBar(navController) },
         )
 
 

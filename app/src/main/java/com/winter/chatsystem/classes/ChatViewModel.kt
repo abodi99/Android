@@ -3,6 +3,8 @@ package com.winter.chatsystem.classes
 import android.content.Context
 import android.os.Message
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +15,11 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -58,6 +65,59 @@ class ChatViewModel(private val context: Context): ViewModel() {
     // Define a LiveData object to show the toast message
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> = _toastMessage
+
+
+    private val _loading = mutableStateOf(false)
+    val loading: State<Boolean> = _loading
+
+    fun getChats(): Flow<List<Chats>> {
+        val database = Firebase.database.reference
+        val chatsRef = database.child("chats")
+        _loading.value = true
+
+
+        return callbackFlow {
+            val eventListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val chats = mutableListOf<Chats>()
+                    for (chatSnapshot in snapshot.children) {
+                        val chat = chatSnapshot.getValue(Chats::class.java)
+                        chat?.let {
+                            it.chatId = chatSnapshot.key ?: ""
+
+                            // get the latest message in the chat
+                            val latestMessage = it.messages?.values?.maxByOrNull { message ->
+                                message.timestamp ?: 0
+                            }
+
+                            // set the timestamp of the latest message as the chat timestamp
+                            it.timestamp = latestMessage?.timestamp ?: 0
+
+                            chats.add(it)
+                        }
+                    }
+
+                    // sort the chats based on the timestamp of the latest message in descending order
+                    val sortedChats = chats.sortedByDescending { chat ->
+                        chat.timestamp
+                    }
+
+                    this@callbackFlow.trySend(sortedChats).isSuccess
+                    _loading.value = false
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            chatsRef.addValueEventListener(eventListener)
+
+            awaitClose {
+                chatsRef.removeEventListener(eventListener)
+            }
+        }.flowOn(Dispatchers.IO)
+    }
 
 
 

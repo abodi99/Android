@@ -1,6 +1,8 @@
 package com.winter.chatsystem.classes
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -49,11 +51,11 @@ data class ChatMessage(
 */
 
 
-
-
 fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
     val database = Firebase.database.reference
     val messagesRef = database.child("chats").child(chatId).child("messages")
+
+
 
     return callbackFlow {
         val eventListener = object : ValueEventListener {
@@ -66,8 +68,10 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
                     val timestamp = messageSnapshot.child("timestamp").value as Long
                     val chatMessage = ChatMessage(messageId, message, senderId, timestamp)
                     messages.add(chatMessage)
+
                 }
                 this@callbackFlow.trySend(messages).isSuccess
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -83,7 +87,7 @@ fun getChatMessages(chatId: String): Flow<List<ChatMessage>> {
     }.flowOn(Dispatchers.IO)
 }
 
-
+/*
 fun getChats(): Flow<List<Chats>> {
     val database = Firebase.database.reference
     val chatsRef = database.child("chats")
@@ -129,6 +133,8 @@ fun getChats(): Flow<List<Chats>> {
         }
     }.flowOn(Dispatchers.IO)
 }
+
+ */
 
 /*fun getChats(): Flow<List<Chats>> {
     val database = Firebase.database.reference
