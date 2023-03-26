@@ -1,4 +1,4 @@
-package com.winter.chatsystem.classes
+package com.winter.chatsystem.logic
 
 data class Chats(
     var chatId: String? = null,

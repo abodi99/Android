@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.AccountCircle
@@ -21,9 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,13 +31,11 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.winter.chatsystem.classes.*
-
-//import com.winter.chatsystem.classes.getChatMessages
-import kotlinx.coroutines.launch
+import com.winter.chatsystem.logic.*
 import java.util.*
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ChatScreen(chatId: String) {
     val messages by getChatMessages(chatId).collectAsState(emptyList())
@@ -51,7 +49,7 @@ fun ChatScreen(chatId: String) {
 
             items(messages) { message ->
 
-                if (message.senderId != FirebaseAuth.getInstance().currentUser!!.uid.toString()) {
+                if (message.senderId != FirebaseAuth.getInstance().currentUser!!.uid) {
                     println(message.senderId)
                     println(FirebaseAuth.getInstance().currentUser!!.uid)
                     Box(
@@ -191,10 +189,10 @@ fun ChatScreen(chatId: String) {
                                 )
                         )
                         Text(
-                            text = if (chatId!!.substringAfter("-") != currentUserEmail!!.split("@")[0]) {
-                                chatId!!.substringAfter("-").capitalize()
+                            text = if (chatId.substringAfter("-") != currentUserEmail!!.split("@")[0]) {
+                                chatId.substringAfter("-").capitalize()
                             } else {
-                                chatId!!.substringBefore("-").capitalize()
+                                chatId.substringBefore("-").capitalize()
                             },
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
@@ -237,6 +235,7 @@ fun ChatScreen(chatId: String) {
                                         text = "Write your message",
                                         //color = MaterialTheme.colorScheme.onTertiary
                                     )
+
                                 },
                                 modifier = Modifier
                                     .width(420.dp)
@@ -264,7 +263,7 @@ fun ChatScreen(chatId: String) {
                                                         chatViewModel.sendMessage(
                                                             chatId,
                                                             message,
-                                                            currentUser!!.uid.toString()
+                                                            currentUser!!.uid,
                                                         )
                                                         textFieldValue = ""
 

@@ -18,7 +18,7 @@ class EmailPasswordActivity(firebaseAuth: com.google.firebase.auth.FirebaseAuth)
         super.onCreate(savedInstanceState)
 
         // Initialize Firebase Auth
-        auth = Firebase.auth
+        auth = Fi.getInstance()
     }
 
     // [START on_start_check_user]
@@ -26,11 +26,12 @@ class EmailPasswordActivity(firebaseAuth: com.google.firebase.auth.FirebaseAuth)
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             reload()
         }
     }
     // [END on_start_check_user]
+
 
     private fun createAccount(email: String, password: String) {
         // [START create_user_with_email]
@@ -44,14 +45,16 @@ class EmailPasswordActivity(firebaseAuth: com.google.firebase.auth.FirebaseAuth)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     updateUI(null)
 
-                        }
                 }
-        }
-    
+            }
+    }
+
 
     private fun signIn(email: String, password: String) {
         // [START sign_in_with_email]
@@ -65,8 +68,10 @@ class EmailPasswordActivity(firebaseAuth: com.google.firebase.auth.FirebaseAuth)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     updateUI(null)
                 }
             }
@@ -98,7 +103,6 @@ class EmailPasswordActivity(firebaseAuth: com.google.firebase.auth.FirebaseAuth)
             }
         }
     }
-
 
 
     companion object {

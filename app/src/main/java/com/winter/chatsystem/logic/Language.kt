@@ -1,4 +1,4 @@
-package com.winter.chatsystem.classes
+package com.winter.chatsystem.logic
 
 import android.app.Application
 import com.yariksoffice.lingver.Lingver

@@ -1,12 +1,9 @@
 package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.*
@@ -18,14 +15,13 @@ import androidx.navigation.NavHostController
 
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.winter.chatsystem.MainActivity
 import com.winter.chatsystem.R
+import com.winter.chatsystem.logic.darkMode
+import com.winter.chatsystem.logic.setTheme
 
-import com.winter.chatsystem.darkMode
 import com.yariksoffice.lingver.Lingver
 import java.util.*
 
@@ -34,9 +30,10 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController, modifier: Modifier = Modifier
+
 ) {
+    val context = LocalContext.current
 
     Scaffold(
         content = {
@@ -44,7 +41,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                ) {
+            ) {
                 LazyColumn(
                     modifier = modifier
                         .align(Alignment.TopCenter)
@@ -53,8 +50,7 @@ fun SettingsScreen(
                     item {
                         Card(
                             shape = RoundedCornerShape(20.dp),
-                            modifier = modifier
-                                .padding(vertical = 3.dp),
+                            modifier = modifier.padding(vertical = 3.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer
                             )
@@ -83,8 +79,7 @@ fun SettingsScreen(
 
                         Card(
                             shape = RoundedCornerShape(20.dp),
-                            modifier = modifier
-                                .padding(vertical = 3.dp),
+                            modifier = modifier.padding(vertical = 3.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer
                             )
@@ -103,15 +98,15 @@ fun SettingsScreen(
                                         .fillMaxWidth()
                                         .padding(vertical = 10.dp)
                                         .clickable {
-                                            Lingver.getInstance().setLocale(MainActivity.instance, "en")
+                                            Lingver
+                                                .getInstance()
+                                                .setLocale(MainActivity.instance, "en")
                                             MainActivity.instance.recreate()
 
                                         },
 
 
-                                )
-
-
+                                    )
 
 
                             }
@@ -122,8 +117,7 @@ fun SettingsScreen(
 
                         Card(
                             shape = RoundedCornerShape(20.dp),
-                            modifier = modifier
-                                .padding(vertical = 3.dp),
+                            modifier = modifier.padding(vertical = 3.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer
                             )
@@ -142,16 +136,15 @@ fun SettingsScreen(
                                         .fillMaxWidth()
                                         .padding(vertical = 10.dp)
                                         .clickable {
-                                            Lingver.getInstance().setLocale(MainActivity.instance, "sv")
+                                            Lingver
+                                                .getInstance()
+                                                .setLocale(MainActivity.instance, "sv")
                                             MainActivity.instance.recreate()
 
                                         },
-                                    //MainActivity.instance.recreate()
 
 
-                                )
-
-
+                                    )
 
 
                             }
@@ -163,10 +156,9 @@ fun SettingsScreen(
                     item {
                         Card(
                             shape = RoundedCornerShape(20.dp),
-                            modifier = modifier
-                                .padding(vertical = 3.dp),
+                            modifier = modifier.padding(vertical = 3.dp),
                             colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                                containerColor = MaterialTheme.colorScheme.primaryContainer
                             )
                         ) {
                             Row(
@@ -184,14 +176,13 @@ fun SettingsScreen(
                                         .padding(vertical = 10.dp)
                                 )
                                 val isChecked = remember { mutableStateOf(false) }
-                                Switch(
-                                    checked = isChecked.value,
-                                    onCheckedChange = {
-                                        isChecked.value = it
-                                        darkMode = !darkMode
+                                Switch(checked = isChecked.value, onCheckedChange = {
+                                    isChecked.value = it
+                                    darkMode = !darkMode
+                                    setTheme(context, darkMode)
 
 
-                                    }
+                                }
 
                                 )
 

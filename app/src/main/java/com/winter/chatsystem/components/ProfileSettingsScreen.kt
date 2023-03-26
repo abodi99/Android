@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
@@ -101,7 +102,7 @@ fun AccountSettingsScreen(
                                     newDisplayName = input
                                 },
                                 //label = { Text(text = "Username", color = MaterialTheme.colorScheme.primary) },
-                                placeholder = { Text(displayName.toString())},
+                                placeholder = { Text(displayName.toString()) },
                                 singleLine = true,
                                 readOnly = true,
                                 modifier = Modifier
@@ -120,7 +121,7 @@ fun AccountSettingsScreen(
                                     newEmail = input
                                 },
                                 //label = { Text(text = "Email", color = MaterialTheme.colorScheme.primary) },
-                                placeholder = { Text(email.toString())},
+                                placeholder = { Text(email.toString()) },
                                 singleLine = true,
                                 readOnly = true,
                                 modifier = Modifier
@@ -130,30 +131,7 @@ fun AccountSettingsScreen(
                     }
 
                     item {
-                        /*Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .padding(top = 13.dp, bottom = 13.dp)
-                        ) {
-                            FloatingActionButton(
-                                onClick = { /*TODO*/ },
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .size(45.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.Edit),
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    modifier = Modifier
-                                )
-                            }
-                        }
 
-                         */
                         Row(
                             modifier = Modifier
                                 .padding(bottom = 13.dp)
@@ -161,6 +139,7 @@ fun AccountSettingsScreen(
                             FloatingActionButton(
                                 onClick = {
                                     navController.navigate("login")
+                                    FirebaseAuth.getInstance().signOut()
 
 
                                 },
@@ -175,7 +154,7 @@ fun AccountSettingsScreen(
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSecondaryContainer,
 
-                                )
+                                    )
                             }
                         }
                     }

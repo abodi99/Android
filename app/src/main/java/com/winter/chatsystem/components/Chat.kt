@@ -2,6 +2,7 @@ package com.winter.chatsystem.components
 
 import android.annotation.SuppressLint
 import android.icu.text.DateFormat
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,9 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.winter.chatsystem.classes.ChatViewModel
+import com.winter.chatsystem.logic.ChatViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
@@ -40,10 +39,7 @@ import java.util.*
 @Composable
 fun ChatScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier
 ) {
-
-
 
 
     val context = LocalContext.current
@@ -65,7 +61,7 @@ fun ChatScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White)
+                        .background(color = MaterialTheme.colorScheme.background)
                         .wrapContentSize(Alignment.Center)
                 ) {
                     CircularProgressIndicator(
@@ -88,7 +84,7 @@ fun ChatScreen(
                         items(chats) { chat ->
                             val chatIds = chat.chatId!!.split("-")
 
-                            if (chatIds[0]!! == currentUserEmail!!.split("@")[0] || chatIds[1]!! == currentUserEmail!!.split(
+                            if (chatIds[0] == currentUserEmail!!.split("@")[0] || chatIds[1] == currentUserEmail.split(
                                     "@"
                                 )[0]
                             ) {
@@ -131,7 +127,7 @@ fun ChatScreen(
 
                                             content = {
                                                 Text(
-                                                    text = if (chat.chatId!!.substringAfter("-") != currentUserEmail!!.split(
+                                                    text = if (chat.chatId!!.substringAfter("-") != currentUserEmail.split(
                                                             "@"
                                                         )[0]
                                                     ) {
@@ -153,20 +149,22 @@ fun ChatScreen(
 
 
                                         Column(modifier = Modifier.weight(1f)) {
-                                            val lastMessageTimestamp = chat.timestamp ?: 0L
+                                            val lastMessageTimestamp = chat.timestamp
 
                                             Text(
                                                 text = DateFormat.getTimeInstance()
                                                     .format(Date(lastMessageTimestamp)),
-                                                modifier = Modifier.align(
-                                                    Alignment.End
-                                                ).padding(6.dp),
+                                                modifier = Modifier
+                                                    .align(
+                                                        Alignment.End
+                                                    )
+                                                    .padding(6.dp),
                                                 color =
                                                 MaterialTheme.colorScheme.onBackground,
                                                 fontSize = 11.sp
                                             )
                                         }
-                                        if (chat.read == false && chat.sendId != user.uid!!) {
+                                        if (!chat.read && chat.sendId != user.uid) {
                                             UnreadMessageCircle()
                                         }
 
@@ -194,8 +192,7 @@ fun ChatScreen(
         }
 
 
-
-        )
+    )
 
 
 
@@ -216,11 +213,14 @@ fun ChatScreen(
                 TextButton(
                     onClick = {
                         // TODO: Create new chat
-                        showDialog = false
                         chatViewModel.checkIfEmailExists(newChatEmail) { exists ->
-                            if (exists){
+                            if (exists) {
                                 chatViewModel.startNewChat(newChatEmail)
+                                showDialog = false
+                                newChatEmail=""
+
                             } else {
+                                Toast.makeText(context, "Email does not exit", Toast.LENGTH_SHORT).show()
 
                             }
                         }
@@ -250,7 +250,11 @@ fun UnreadMessageCircle(
     color: Color = Color.Green,
 
     ) {
-    Box(modifier = Modifier.size(size).fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .fillMaxWidth(), contentAlignment = Alignment.CenterEnd
+    ) {
         Canvas(modifier = Modifier.matchParentSize()) {
             val radius = size.toPx() / 2
             drawCircle(

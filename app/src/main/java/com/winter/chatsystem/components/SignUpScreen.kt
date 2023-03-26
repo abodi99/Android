@@ -24,10 +24,12 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.winter.chatsystem.EmailPasswordActivity
-import com.winter.chatsystem.classes.LoginError
-import com.winter.chatsystem.classes.isValidEmail
-import com.winter.chatsystem.classes.isValidPassword
+import com.winter.chatsystem.logic.LoginError
+import com.winter.chatsystem.logic.isValidEmail
+import com.winter.chatsystem.logic.isValidPassword
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,10 +45,11 @@ fun SignUpScreen(
     var passwordVisibility by remember { mutableStateOf(false) }
 
     val auth = FirebaseAuth.getInstance()
+    val emailPasswordActivity = EmailPasswordActivity(Firebase.auth)
+
 
     var usernameError by remember { mutableStateOf("") }
-    var emailError by remember { mutableStateOf("") }
-    var passwordError by remember { mutableStateOf("") }
+
     var loginError by remember { mutableStateOf<LoginError?>(null) }
 
     fun signup(userName: String, email: String, password: String) {
@@ -61,47 +64,49 @@ fun SignUpScreen(
         } else if (passwordCreation != passwordConfirmation) {
             loginError = LoginError.nonMatchPassword
         } else {
-            auth.fetchSignInMethodsForEmail(email)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val signInMethods = task.result?.signInMethods
-                        if (signInMethods?.isNotEmpty() == true) {
-                            // Email already exists
-                            loginError = LoginError.EmailAlreadyExists
+            if (emailIsInUse(email) == true) {
+                // Email already exists
+                loginError = LoginError.EmailAlreadyExists
+            } else {
+                // Email doesn't exist, create new user account
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // User account creation is successful
+                            Log.d(
+                                EmailPasswordActivity.TAG,
+                                "createUserWithEmail:success"
+                            )
+                            val user = auth.currentUser
+                            updateUI(user)
+                            println("User account creation is successful")
+                            navController.navigate("home")
+
+                            //auth.currentUser?.sendEmailVerification()
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                .setDisplayName(userName)
+                                .build()
+
+                            user?.updateProfile(profileUpdates)
                         } else {
-                            // Email doesn't exist, create new user account
-                            auth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        // User account creation is successful
-                                        Log.d(EmailPasswordActivity.TAG, "createUserWithEmail:success")
-                                        val user = auth.currentUser
-                                        updateUI(user)
-                                        println("User account creation is successful")
-                                        navController.navigate("home")
-
-                                        //auth.currentUser?.sendEmailVerification()
-                                        val profileUpdates = UserProfileChangeRequest.Builder()
-                                            .setDisplayName(userName)
-                                            .build()
-
-                                        user?.updateProfile(profileUpdates)
-                                    } else {
-                                        // User account creation failed
-                                        println("User account creation failed")
-                                        // If sign in fails, display a message to the user.
-                                        Log.w(EmailPasswordActivity.TAG, "createUserWithEmail:failure", task.exception)
-                                        Toast.makeText(context, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show()
-                                        updateUI(null)
-                                    }
-                                }
+                            // User account creation failed
+                            println("User account creation failed")
+                            // If sign in fails, display a message to the user.
+                            Log.w(
+                                EmailPasswordActivity.TAG,
+                                "createUserWithEmail:failure",
+                                task.exception
+                            )
+                            Toast.makeText(
+                                context, "email is already in use",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            updateUI(null)
                         }
-                    } else {
-                        // Failed to fetch sign-in methods for email
-                        println("Failed to fetch sign-in methods for email")
+
+
                     }
-                }
+            }
         }
 
     }
@@ -266,21 +271,33 @@ fun SignUpScreen(
                             LoginError.InvalidEmail -> {
                                 // Display "Please enter a valid email address" error message
                                 //println("Please enter a valid email address")
-                                Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    context,
+                                    "Please enter a valid email",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                                 loginError = null
                             }
                             LoginError.EmptyPassword -> {
                                 // Display "Please enter a password" error message
                                 //println("Please enter a password")
-                                Toast.makeText(context, "Please enter a password", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    context,
+                                    "Please enter a password",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                                 loginError = null
                             }
                             LoginError.WeakPassword -> {
                                 // Display "Please enter a stronger password" error message
                                 println("Please enter a stronger password")
-                                Toast.makeText(context, "Please enter a stronger password", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    context,
+                                    "Please enter a stronger password",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                                 loginError = null
                             }
@@ -302,7 +319,8 @@ fun SignUpScreen(
                             LoginError.Unknown -> {
                                 // Display "An unknown error occurred" error message
                                 println("An unknown error occurred")
-                                Toast.makeText(context, "An unknown error occurred", Toast.LENGTH_SHORT
+                                Toast.makeText(
+                                    context, "An unknown error occurred", Toast.LENGTH_SHORT
                                 ).show()
                                 loginError = null
                             }
@@ -350,5 +368,19 @@ private fun updateUI(user: FirebaseUser?) {
 
 }
 
+val auth = FirebaseAuth.getInstance()
 
+
+private fun emailIsInUse(email: String): Boolean {
+    var result = false
+    auth.fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val signInMethods = task.result?.signInMethods
+            if (signInMethods?.isNotEmpty() == true) {
+                result = true
+            }
+        }
+    }
+    return result
+}
 

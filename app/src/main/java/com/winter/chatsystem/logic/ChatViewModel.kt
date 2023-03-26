@@ -1,13 +1,9 @@
-package com.winter.chatsystem.classes
+package com.winter.chatsystem.logic
 
 import android.content.Context
-import android.os.Message
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,51 +16,20 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
-import java.util.*
 import kotlin.collections.HashMap
 
 
 
 
-var messageCounter = 0
+class ChatViewModel(private val context: Context) : ViewModel() {
 
 
-class ChatViewModel(private val context: Context): ViewModel() {
-    private val _messages = MutableLiveData<List<Message>>()
-    val messages: LiveData<List<Message>> = _messages
-
-    private val firebaseDatabase = Firebase.database.reference
-
-
-
-    private val sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    private val sharedPreferences =
+        context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
     var messageCounter = sharedPreferences.getInt("messageCounter", 0)
-
-    fun fetchMessages() {
-        val messagesRef = firebaseDatabase.child("messages")
-        messagesRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val messages = mutableListOf<Message>()
-                snapshot.children.forEach { dataSnapshot ->
-                    val message = dataSnapshot.getValue(Message::class.java)
-                    message?.let {
-                        messages.add(it)
-                    }
-                }
-                _messages.postValue(messages)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Failed to fetch messages: ${error.message}")
-            }
-        })
-    }
-
 
 
     // Define a LiveData object to show the toast message
-    private val _toastMessage = MutableLiveData<String>()
-    val toastMessage: LiveData<String> = _toastMessage
 
 
     private val _loading = mutableStateOf(false)
@@ -87,7 +52,7 @@ class ChatViewModel(private val context: Context): ViewModel() {
 
                             // get the latest message in the chat
                             val latestMessage = it.messages?.values?.maxByOrNull { message ->
-                                message.timestamp ?: 0
+                                message.timestamp
                             }
 
                             // set the timestamp of the latest message as the chat timestamp
@@ -120,7 +85,6 @@ class ChatViewModel(private val context: Context): ViewModel() {
     }
 
 
-
     fun checkIfEmailExists(newEmail: String, callback: (Boolean) -> Unit) {
         val auth = FirebaseAuth.getInstance()
 
@@ -128,7 +92,6 @@ class ChatViewModel(private val context: Context): ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val emailExists = task.result?.signInMethods
-                    val result = task.result
                     if (emailExists?.isNotEmpty() == true) {
                         // Email already exists
                         callback(true)
@@ -189,18 +152,12 @@ class ChatViewModel(private val context: Context): ViewModel() {
     }
 
 
-
-
-
-
-
     fun sendMessage(chatId: String, text: String, senderID: String) {
         val database = FirebaseDatabase.getInstance()
         val reference = database.getReference("/chats/$chatId/messages").push()
         val messageMap = HashMap<String, Any>()
         val currentUser = FirebaseAuth.getInstance().currentUser
 
-        val messageId = UUID.randomUUID().toString() // Generate a random UUID
 
 
         messageMap["messageId"] = "message-${messageCounter++}"

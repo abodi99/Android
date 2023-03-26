@@ -3,38 +3,29 @@ package com.winter.chatsystem
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.winter.chatsystem.classes.NavigationItem
+import com.winter.chatsystem.logic.NavigationItem
 import com.winter.chatsystem.components.*
 import com.winter.chatsystem.components.ChatScreen
+import com.winter.chatsystem.logic.darkMode
 import com.winter.chatsystem.ui.theme.ChatSystemTheme
 
-var darkMode by mutableStateOf(false)
+
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
+
     companion object {
         lateinit var instance: MainActivity
     }
@@ -47,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
         FirebaseApp.initializeApp(this)
 
-
+        darkMode = com.winter.chatsystem.logic.getTheme(this)
         setContent {
             ChatSystemTheme(darkMode) {
                 // A surface container using the 'background' color from the theme
@@ -64,6 +55,7 @@ class MainActivity : ComponentActivity() {
 }
 
 data class SettingsText(val text: String)
+
 var settingsText = listOf(
     SettingsText("Edit Profile"),
     SettingsText("Change Password"),
@@ -130,11 +122,7 @@ fun AppScreen() {
             }
         }
 
-        // IMPORTANT, Scaffold from Accompanist, initialized in build.gradle.
-        // We use Scaffold from Accompanist, because we need full control of paddings, for example
-        // in default Scaffold from Compose we can't disable padding for content from top if we
-        // have TopAppBar. In our case it's required because we have animation for TopAppBar,
-        // content should be under TopAppBar and we manually control padding for each pages.
+
         com.google.accompanist.insets.ui.Scaffold(
             bottomBar = {
                 BottomBar(
@@ -152,9 +140,9 @@ fun AppScreen() {
                 NavHost(
 
                     navController = navController,
-                    startDestination = if (auth.currentUser!=null) "home" else "signup",
+                    startDestination = if (auth.currentUser != null) "home" else "signup",
 
-               //     startDestination = "signup",
+                    //     startDestination = "signup",
                 ) {
                     composable(NavigationItem.Home.route) {
                         // show BottomBar and TopBar
@@ -186,16 +174,6 @@ fun AppScreen() {
                             navController = navController,
                         )
                     }
-                   /* composable("chat/1") {
-                        // show BottomBar and TopBar
-                        LaunchedEffect(Unit) {
-                            bottomBarState.value = true
-                            topBarState.value = false
-                        }
-                        OneToOne(
-                            navController = navController, 1
-                        )
-                    }*/
 
                     composable("{chatId}") { backStackEntry ->
                         val arguments = requireNotNull(backStackEntry.arguments)
@@ -237,94 +215,3 @@ fun AppScreen() {
     }
 }
 
-@ExperimentalAnimationApi
-@Composable
-fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean>) {
-    val items = listOf(
-        NavigationItem.Settings,
-        NavigationItem.Home,
-        NavigationItem.ProfileSettings
-    )
-
-    AnimatedVisibility(
-        visible = bottomBarState.value,
-        enter = slideInVertically(initialOffsetY = { it }),
-        exit = slideOutVertically(targetOffsetY = { it }),
-        content = {
-            NavigationBar(
-                tonalElevation = 7.dp
-            ) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route
-
-                items.forEach { item ->
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                item.icon,
-                                contentDescription = item.getTitle(LocalContext.current)
-                            )
-                        },
-                        label = { Text(text = item.getTitle(LocalContext.current)) },
-                        selected = currentRoute == item.route,
-                        onClick = {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
-                        )
-                    )
-                }
-            }
-        }
-    )
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@ExperimentalAnimationApi
-@Composable
-fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val title: String = when (navBackStackEntry?.destination?.route ?: "home") {
-        "home" -> stringResource(id = R.string.Home)
-        "profile" -> stringResource(id = R.string.Profile)
-        "settings" -> stringResource(id = R.string.Settings)
-        "chat/1" -> stringResource(id = R.string.Chats)
-        else -> "Home"
-    }
-
-    AnimatedVisibility(
-        visible = topBarState.value,
-        enter = slideInVertically(initialOffsetY = { -it }),
-        exit = slideOutVertically(targetOffsetY = { -it }),
-        content = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = title,
-                        fontSize = 27.sp,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceTint,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceTint
-                )
-            )
-            Divider(
-                color = MaterialTheme.colorScheme.primary,
-                thickness = 2.dp,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 60.dp)
-            )
-        }
-    )
-}

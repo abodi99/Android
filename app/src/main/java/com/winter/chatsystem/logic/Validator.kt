@@ -1,4 +1,4 @@
-package com.winter.chatsystem.classes
+package com.winter.chatsystem.logic
 
 fun isValidEmail(email: String): Boolean {
     val emailRegex = Regex("[A-Za-z\\d._%+-]+@[A-Za-z\\d.-]+\\.[A-Z|a-z]{2,}")
