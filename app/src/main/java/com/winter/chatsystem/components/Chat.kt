@@ -32,9 +32,12 @@ import com.winter.chatsystem.classes.getChats
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.Dp
 import com.google.firebase.database.FirebaseDatabase
+import com.winter.chatsystem.R
+
 import java.util.*
 
 
@@ -160,7 +163,7 @@ fun ChatScreen(
                                 .fillMaxWidth()
                                 .padding(top = 24.dp)
                         ) {
-                            Text("Start a new conversation")
+                            Text(stringResource(id = R.string.StartNewChat))
                         }
                     }
                 }

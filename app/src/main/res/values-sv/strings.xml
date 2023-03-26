@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chat System</string>
+    <string name="Profile">Profil</string>
+    <string name="Language">Byt till svenska språket</string>
+    <string name="Settings">inställningar</string>
+    <string name="Chats">Chattar</string>
+    <string name="Logout">Logga ut</string>
+    <string name="Edit">Redigera</string>
+    <string name="StartNewChat">Starta en ny konversation</string>
+    <string name="DarkTheme">Mörkt läge</string>
+    <string name="Swedish">Svenska</string>
+    <string name="English">Engelska</string>
+</resources>

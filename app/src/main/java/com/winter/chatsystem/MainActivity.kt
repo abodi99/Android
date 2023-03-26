@@ -13,6 +13,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,9 +35,13 @@ var darkMode by mutableStateOf(false)
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
+    companion object {
+        lateinit var instance: MainActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        instance = this
 
         auth = FirebaseAuth.getInstance()
 
@@ -49,6 +55,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.surface
                 ) {
+
                     AppScreen()
                 }
             }
@@ -255,10 +262,10 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
                         icon = {
                             Icon(
                                 item.icon,
-                                contentDescription = item.title
+                                contentDescription = item.getTitle(LocalContext.current)
                             )
                         },
-                        label = { Text(text = item.title) },
+                        label = { Text(text = item.getTitle(LocalContext.current)) },
                         selected = currentRoute == item.route,
                         onClick = {
                             navController.navigate(item.route) {
@@ -279,16 +286,17 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
     )
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
 @Composable
 fun TopBar(navController: NavController, topBarState: MutableState<Boolean>) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val title: String = when (navBackStackEntry?.destination?.route ?: "home") {
-        "home" -> "Home"
-        "profile" -> "Profile"
-        "settings" -> "Settings"
-        "chat/1" -> "Chat"
+        "home" -> stringResource(id = R.string.Home)
+        "profile" -> stringResource(id = R.string.Profile)
+        "settings" -> stringResource(id = R.string.Settings)
+        "chat/1" -> stringResource(id = R.string.Chats)
         else -> "Home"
     }
 

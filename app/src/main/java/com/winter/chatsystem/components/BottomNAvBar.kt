@@ -10,9 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.winter.chatsystem.R
 
 @Composable
 fun BottomNavBar(
@@ -20,7 +22,7 @@ fun BottomNavBar(
     modifier: Modifier = Modifier
 ) {
     var selectedItem by rememberSaveable { mutableStateOf(1) }
-    val items = listOf("Settings", "Chat", "Profile")
+    val items = listOf(stringResource(id = R.string.Settings), stringResource(id = R.string.Chats), stringResource(id = R.string.Profile))
 
     NavigationBar() {
         NavigationBar(

@@ -167,28 +167,6 @@ class ChatViewModel(private val context: Context): ViewModel() {
     }
 
 
-
-
-
-    fun printMessages(chatId: String) {
-        val messagesRef = firebaseDatabase.child("chats").child(chatId).child("messages")
-        messagesRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (messageSnapshot in snapshot.children) {
-                    val messageId = messageSnapshot.key
-                    val message = messageSnapshot.child("message").value as String
-                    val senderId = messageSnapshot.child("senderId").value as String
-                    val timestamp = messageSnapshot.child("timestamp").value as Long
-                    println("MessageId: $messageId, Message: $message, SenderId: $senderId, Timestamp: $timestamp")
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Failed to fetch messages: ${error.message}")
-            }
-        })
-    }
-
 }
 
 

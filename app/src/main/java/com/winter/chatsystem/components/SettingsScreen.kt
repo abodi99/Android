@@ -15,12 +15,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.winter.chatsystem.settingsText
 
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.*
-import com.winter.chatsystem.darkMode
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.stringResource
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.winter.chatsystem.MainActivity
+import com.winter.chatsystem.R
 
+import com.winter.chatsystem.darkMode
+import com.yariksoffice.lingver.Lingver
+import java.util.*
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -43,34 +50,116 @@ fun SettingsScreen(
                         .align(Alignment.TopCenter)
                         .padding(vertical = 70.dp)
                 ) {
-                    items(settingsText) {text ->
+                    item {
                         Card(
-                            modifier = modifier
-                                .padding(vertical = 3.dp)
-                                .clickable {
-                                    navController.navigate("profile")
-                                },
                             shape = RoundedCornerShape(20.dp),
+                            modifier = modifier
+                                .padding(vertical = 3.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer
                             )
-
                         ) {
                             Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = modifier
                                     .padding(horizontal = 15.dp)
+                                    .padding(end = 20.dp)
                             ) {
                                 Text(
-                                    text = text.text,
+                                    text = stringResource(id = R.string.Profile),
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     fontSize = 16.sp,
                                     modifier = modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 10.dp)
+                                        .clickable {
+                                            navController.navigate("profile")
+                                        },
                                 )
                             }
                         }
                     }
+                    item {
+
+                        Card(
+                            shape = RoundedCornerShape(20.dp),
+                            modifier = modifier
+                                .padding(vertical = 3.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = modifier
+                                    .padding(horizontal = 15.dp)
+                                    .padding(end = 20.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.English),
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontSize = 16.sp,
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 10.dp)
+                                        .clickable {
+                                            Lingver.getInstance().setLocale(MainActivity.instance, "en")
+                                            MainActivity.instance.recreate()
+
+                                        },
+
+
+                                )
+
+
+
+
+                            }
+                        }
+
+                    }
+                    item {
+
+                        Card(
+                            shape = RoundedCornerShape(20.dp),
+                            modifier = modifier
+                                .padding(vertical = 3.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = modifier
+                                    .padding(horizontal = 15.dp)
+                                    .padding(end = 20.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.Swedish),
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontSize = 16.sp,
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 10.dp)
+                                        .clickable {
+                                            Lingver.getInstance().setLocale(MainActivity.instance, "sv")
+                                            MainActivity.instance.recreate()
+
+                                        },
+                                    //MainActivity.instance.recreate()
+
+
+                                )
+
+
+
+
+                            }
+                        }
+
+                    }
+
+
                     item {
                         Card(
                             shape = RoundedCornerShape(20.dp),
@@ -87,7 +176,7 @@ fun SettingsScreen(
                                     .padding(end = 20.dp)
                             ) {
                                 Text(
-                                    text = "Dark Theme",
+                                    text = stringResource(id = R.string.DarkTheme),
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     fontSize = 16.sp,
                                     modifier = modifier
@@ -101,9 +190,11 @@ fun SettingsScreen(
                                         isChecked.value = it
                                         darkMode = !darkMode
 
-                                    },
-                                    modifier = modifier
+
+                                    }
+
                                 )
+
                             }
                         }
                     }
@@ -112,4 +203,5 @@ fun SettingsScreen(
         },
         //bottomBar = { BottomNavBar(navController) }
     )
+
 }

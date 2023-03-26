@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +25,7 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
-
+import com.winter.chatsystem.R
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -129,7 +130,7 @@ fun AccountSettingsScreen(
                     }
 
                     item {
-                        Row(
+                        /*Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
@@ -143,7 +144,7 @@ fun AccountSettingsScreen(
                                     .size(45.dp)
                             ) {
                                 Text(
-                                    text = "Edit",
+                                    text = stringResource(id = R.string.Edit),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -151,6 +152,8 @@ fun AccountSettingsScreen(
                                 )
                             }
                         }
+
+                         */
                         Row(
                             modifier = Modifier
                                 .padding(bottom = 13.dp)
@@ -167,7 +170,7 @@ fun AccountSettingsScreen(
                                     .size(45.dp)
                             ) {
                                 Text(
-                                    text = "Logout",
+                                    text = stringResource(id = R.string.Logout),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSecondaryContainer,

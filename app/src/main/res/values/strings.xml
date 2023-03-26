@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Chat System</string>
+    <string name="Profile">Profile</string>
+    <string name="Language">Switch to Swedish Language</string>
+    <string name="Settings">Settings</string>
+    <string name="Chats">Chats</string>
+    <string name="Logout">Logout</string>
+    <string name="Edit">Edit</string>
+    <string name="StartNewChat">Start a new conversation</string>
+    <string name="DarkTheme">Dark Theme</string>
+    <string name="Swedish">Swedish</string>
+    <string name="English">English</string>
+    <string name="Home">Home</string>
 </resources>
